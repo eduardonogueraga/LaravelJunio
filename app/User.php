@@ -20,7 +20,7 @@ class User extends Authenticatable
 
     protected $casts = [
         'active' => 'bool',
-        'last_login_at' => 'datetime',
+        'last_login_at' => 'datetime', //Casteos
     ];
 
     /**
@@ -31,7 +31,7 @@ class User extends Authenticatable
      */
     public function newEloquentBuilder($query)
     {
-        return new UserQuery($query);
+        return new UserQuery($query); //Enlaza el modelo y las querys con builder
     }
 
     public function isAdmin()
@@ -56,13 +56,13 @@ class User extends Authenticatable
 
     public function setStateAttribute($value)
     {
-        $this->attributes['active'] = ($value == 'active');
+        $this->attributes['active'] = ($value == 'active'); //Si el valor es active devuelve true
     }
 
     public function getStateAttribute()
     {
-        if ($this->active !== null) {
-            return $this->active ? 'active' : 'inactive';
+        if ($this->active !== null) { //si no es nulo
+            return $this->active ? 'active' : 'inactive'; //Si es true dame un active
         }
     }
 
@@ -71,10 +71,10 @@ class User extends Authenticatable
         return "{$this->first_name} {$this->last_name}";
     }
 
-    public function delete()
+    public function delete() //Redefine el metodo delete
     {
         DB::transaction(function () {
-            if (parent::delete()) {
+            if (parent::delete()) { //SI  se hace un borrado padre
                 $this->profile()->delete();
 
                 DB::table('skill_user')

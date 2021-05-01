@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
 
         Paginator::useBootstrap();
 
-        $this->app->bind(LengthAwarePaginator::class, \App\LenghtAwarePaginator::class);
+        $this->app->bind(LengthAwarePaginator::class, \App\LenghtAwarePaginator::class); //re mezcla la clase origen con la nuestra
     }
 
     /**
@@ -37,8 +37,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(Sortable::class, function ($app) {
-            return new Sortable(request()->url());
+        $this->app->bind(Sortable::class, function ($app) { //Bindea la url
+            return new Sortable(request()->url()); //Prepara la / de nuestro dominio y crea la instancua sortable
         });
     }
 }

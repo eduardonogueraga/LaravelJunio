@@ -16,9 +16,9 @@ class UserController extends Controller
     public function index(Sortable $sortable)
     {
         $users = User::query()
-            ->with('team', 'skills', 'profile.profession')
-            ->withLastLogin()
-            ->onlyTrashedIf(request()->routeIs('users.trashed'))
+            ->with('team', 'skills', 'profile.profession') //relaciones
+            ->withLastLogin() //Pilla subconsula del user query
+            ->onlyTrashedIf(request()->routeIs('users.trashed'))  //Pilla solo los borrados si se cumple esa ruta
             ->when(request('team'), function ($query, $team) {
                 if ($team == 'with_team') {
                     $query->has('team');
@@ -26,24 +26,24 @@ class UserController extends Controller
                     $query->doesntHave('team');
                 }
             })
-            ->applyFilters()
-            ->orderByDesc('created_at')
-            ->paginate();
+            ->applyFilters() //Aplica los filtros
+            ->orderByDesc('created_at') //Ordenacion por defecto
+            ->paginate(); //Al usar paginate el obj se convierte en awarepaginator y tiene mas propiedades
 
-        $sortable->appends($users->parameters());
+        $sortable->appends($users->parameters()); //Setea la query en sortable y pasa los paramentros URL
 
         return view('users.index', [
             'users' => $users,
-            'view' => request()->routeIs('users.trashed') ? 'trash' : 'index',
+            'view' => request()->routeIs('users.trashed') ? 'trash' : 'index', //Pasa una vista u otra
             'skills' => Skill::orderBy('name')->get(),
-            'checkedSkills' => collect(request('skills')),
-            'sortable' => $sortable,
+            'checkedSkills' => collect(request('skills')), //Pasa la coleccion de valores validos
+            'sortable' => $sortable, //Pasa el obj sortable
         ]);
     }
 
     public function create()
     {
-        return $this->form('users.create', new User);
+        return $this->form('users.create', new User); //Pasa la instancia para inyectar
     }
 
     public function store(CreateUserRequest $request)

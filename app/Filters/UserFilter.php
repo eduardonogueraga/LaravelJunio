@@ -16,9 +16,9 @@ class UserFilter extends QueryFilter
         'login' => 'last_login_at',
     ];
 
-    public function getColumnName($alias)
+    public function getColumnName($alias) //getter de alias para el order
     {
-        return $this->aliasses[$alias] ?? $alias;
+        return $this->aliasses[$alias] ?? $alias;  //Si existe el alis bien sino se devuelve el paramtro
     }
 
     public function rules(): array
@@ -30,7 +30,7 @@ class UserFilter extends QueryFilter
             'skills' => 'array|exists:skills,id',
             'from' => 'date_format:d/m/Y',
             'to' => 'date_format:d/m/Y',
-            'order' => [new SortableColumn(['first_name', 'email', 'date', 'login'])],
+            'order' => [new SortableColumn(['first_name', 'email', 'date', 'login'])],  //Crea una instancia de sortcolum y le pasa los campos validos
         ];
     }
 
@@ -45,7 +45,7 @@ class UserFilter extends QueryFilter
 
     public function state($query, $state)
     {
-        return $query->where('active', $state == 'active');
+        return $query->where('active', $state == 'active');  //la segunda condicion seria un true OJO
     }
 
     public function skills($query, $skills)
@@ -55,12 +55,12 @@ class UserFilter extends QueryFilter
             ->whereColumn('s.user_id', 'users.id')
             ->whereIn('skill_id', $skills);
 
-        $query->whereQuery($subquery, count($skills));
+        $query->whereQuery($subquery, count($skills)); //Es la funcion del querybuilder para hacer subconsultas y bindear parms
     }
 
     public function from($query, $date)
     {
-        $date = Carbon::createFromFormat('d/m/Y', $date);
+        $date = Carbon::createFromFormat('d/m/Y', $date);  //Parsea a carbon
 
         $query->whereDate('created_at', '>=', $date);
     }
@@ -74,8 +74,11 @@ class UserFilter extends QueryFilter
 
     public function order($query, $value)
     {
-        [$column, $direction] = Sortable::info($value);
+        //Lo que hace esto es dar valor a ambos con lo que se recibe del array en orden
+        //colunm == first_name direccion == asc
 
-        $query->orderBy($this->getColumnName($column), $direction);
+        [$column, $direction] = Sortable::info($value); //Se le envia el nombre del campo a sortear (first_name)
+
+        $query->orderBy($this->getColumnName($column), $direction); //Si la columna tiene alias lo cambia sino nada
     }
 }

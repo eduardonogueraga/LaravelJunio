@@ -17,7 +17,7 @@ class UserQuery extends QueryBuilder
             ->limit(1);
 
         return $this->addSelect([
-            'last_login_at' => $subselect,
+            'last_login_at' => $subselect, //Tiene que declararse como alias en las rules del filtro
         ]);
     }
 }
