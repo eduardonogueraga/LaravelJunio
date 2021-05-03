@@ -263,4 +263,75 @@ class UpdateUsersTest extends TestCase
 
         $this->assertDatabaseMissing('users', ['first_name' => 'Pepe']);
     }
+
+    /** @test */
+    function the_twitter_field_can_be_updated_empty()
+    {
+        $user = User::factory()->create();
+        $user->profile()->update([
+            'twitter' => 'https://twitter.com/antonio',
+        ]);
+
+      $this->from('/usuarios/'.$user->id.'/editar')
+          ->put('/usuarios/'. $user->id, $this->withData([
+              'twitter' => '',
+          ]))->assertRedirect('/usuarios/'.$user->id);
+
+      $this->assertCredentials([
+          'first_name' => 'Pepe',
+          'last_name' => 'Pérez',
+          'email' => 'pepe@mail.es',
+          'password' => '123456',
+      ]);
+
+      $this->assertDatabaseHas('user_profiles', [
+         'twitter' => null,
+      ]);
+    }
+
+    /** @test */
+    function the_twitter_must_be_updated_as_url()
+    {
+        $this->handleValidationExceptions();
+
+        $user = User::factory()->create();
+        $user->profile()->update([
+            'twitter' => 'https://twitter.com/antonio',
+        ]);
+
+        $this->from('/usuarios/'.$user->id.'/editar')
+            ->put('/usuarios/'.$user->id, $this->withData([
+                'twitter' => 'not_url_field',
+            ]))->assertRedirect('/usuarios/'.$user->id.'/editar')
+            ->assertSessionHasErrors(['twitter']);
+
+        $this->assertDatabaseMissing('users', ['email' => 'pepe@mail.es']);
+
+        $this->assertDatabaseHas('user_profiles',[
+            'twitter' => 'https://twitter.com/antonio',
+        ]);
+    }
+
+    /** @test */
+    function the_bio_field_can_not_be_updated_empty()
+    {
+        $this->handleValidationExceptions();
+
+        $user = User::factory()->create();
+        $user->profile()->update([
+            'bio' => 'Testing biografy field'
+        ]);
+
+        $this->from('/usuarios/'.$user->id.'/editar')
+            ->put('/usuarios/'.$user->id, $this->withData([
+                'bio' => ''
+            ]))->assertRedirect('/usuarios/'.$user->id.'/editar')
+            ->assertSessionHasErrors(['bio']);
+
+        $this->assertDatabaseMissing('users', ['email' => 'pepe@mail.es']);
+
+        $this->assertDatabaseHas('user_profiles', [
+            'bio' => 'Testing biografy field'
+        ]);
+    }
 }

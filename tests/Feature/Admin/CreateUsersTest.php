@@ -196,6 +196,31 @@ class CreateUsersTest extends TestCase
     }
 
     /** @test */
+    function the_twitter_field_must_be_valid()
+    {
+        $this->handleValidationExceptions();
+
+        $this->post('/usuarios', $this->withData(
+            ['twitter' => 'not-an-url-field']
+        ))->assertSessionHasErrors(['twitter']);
+
+        $this->assertDatabaseEmpty('users');
+
+    }
+
+    /** @test */
+    function the_bio_field_is_required()
+    {
+        $this->handleValidationExceptions();
+        $this->post('/usuarios', $this->withData([
+            'bio' => '',
+        ]))->assertSessionHasErrors(['bio']);
+
+        $this->assertDatabaseEmpty('users');
+    }
+
+
+    /** @test */
     function the_profession_id_field_is_optional()
     {
         $this->post('/usuarios/', $this->withData([
