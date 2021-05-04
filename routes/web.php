@@ -23,6 +23,7 @@ Route::get('/usuarios/{user}/editar', 'UserController@edit')->name('users.edit')
 Route::put('/usuarios/{user}', 'UserController@update')->name('users.update');
 Route::delete('/usuarios/{id}', 'UserController@destroy')->name('users.destroy');
 Route::get('/usuarios/papelera', 'UserController@index')->name('users.trashed');
+Route::get('/usuarios/{id}/restore', 'UserController@restore')->name('users.restore');
 Route::get('usuarios/{user}', 'UserController@show')->where('user', '[0-9]+')->name('users.show');
 Route::patch('/usuarios/{user}/papelera', 'UserController@trash')->name('users.trash');
 
