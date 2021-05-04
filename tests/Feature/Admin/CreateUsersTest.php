@@ -18,6 +18,7 @@ class CreateUsersTest extends TestCase
         'email' => 'pepe@mail.es',
         'password' => '123456',
         'profession_id' => '',
+        'other_profession' => '',
         'bio' => 'Programador de Laravel y Vue.js',
         'twitter' => 'https://twitter.com/pepe',
         'role' => 'user',
@@ -178,7 +179,8 @@ class CreateUsersTest extends TestCase
     /** @test */
     function the_twitter_field_is_optional()
     {
-        $this->post('/usuarios/', $this->withData(['twitter' => null]))
+        $profession = Profession::factory()->create();
+        $this->post('/usuarios/', $this->withData(['twitter' => null, 'profession_id' => $profession->id]))
             ->assertRedirect('/usuarios');
 
         $this->assertCredentials([
@@ -221,10 +223,22 @@ class CreateUsersTest extends TestCase
 
 
     /** @test */
-    function the_profession_id_field_is_optional()
+    function at_least_one_of_both_profession_fields_is_required()
+    {
+        $this->handleValidationExceptions();
+        $this->post('/usuarios/', $this->withData([
+            'profession_id' => null,
+            'other_profession' => null,
+        ]))->assertSessionHasErrors(['profession_id']);
+
+        $this->assertDatabaseEmpty('users');;
+    }
+
+    /** @test */
+    function profession_id_is_optional_if_other_profession_is_present()
     {
         $this->post('/usuarios/', $this->withData([
-            'profession_id' => null
+            'other_profession' => 'OtherProfession',
         ]))->assertRedirect('/usuarios');
 
         $this->assertCredentials([
@@ -233,13 +247,27 @@ class CreateUsersTest extends TestCase
             'email' => 'pepe@mail.es',
             'password' => '123456',
         ]);
-
+        $profession = Profession::where('title', 'OtherProfession')->first();
         $this->assertDatabaseHas('user_profiles', [
-            'bio' => 'Programador de Laravel y Vue.js',
-            'user_id' => User::findByEmail('pepe@mail.es')->id,
-            'profession_id' => null,
+            'profession_id' => $profession->id,
         ]);
+
     }
+
+    /** @test */
+    function the_other_profession_must_be_unique()
+    {
+        $this->handleValidationExceptions();
+        Profession::factory()->create(['title'=>'RepeatedProfession']);
+
+        $this->post('/usuarios/', $this->withData([
+            'other_profession' => 'RepeatedProfession',
+        ]))->assertSessionHasErrors(['other_profession']);
+
+        $this->assertDatabaseEmpty('users');
+        $this->assertEquals(1, Profession::count());
+    }
+
 
     /** @test */
     function the_profession_id_must_be_valid()
@@ -300,8 +328,10 @@ class CreateUsersTest extends TestCase
     /** @test */
     function the_role_field_is_optional()
     {
+        $profession = Profession::factory()->create();
         $this->post('/usuarios/', $this->withData([
             'role' => null,
+            'profession_id' => $profession->id
         ]))->assertRedirect('usuarios');
 
         $this->assertDatabaseHas('users', [
@@ -318,7 +348,7 @@ class CreateUsersTest extends TestCase
         $this->from('usuarios/nuevo')
             ->post('/usuarios/', $this->withData([
                 'role' => 'role-invalid',
-            ]))->assertSessionHasErrors('role');
+            ]))->assertSessionHasErrors(['role']);
 
         $this->assertDatabaseEmpty('users');
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Profession;
 use App\Role;
 use App\User;
 use Illuminate\Foundation\Http\FormRequest;
@@ -39,8 +40,18 @@ class CreateUserRequest extends FormRequest
                 Rule::in(Role::getList())
             ],
             'profession_id' => [
-                'nullable', 'present',
-                Rule::exists('professions', 'id')->whereNull('deleted_at')
+                'nullable',
+                'required_without:other_profession',
+                Rule::exists('professions', 'id')->whereNull('deleted_at'),
+                function ($attribute, $value, $fail) {
+                    if (request()->has($attribute) === request()->filled('other_profession')) {
+                        return $fail('Complete solo un campo del tipo profesión');
+                    }
+                }
+            ],
+            'other_profession' => [
+                'nullable',
+                Rule::unique('professions', 'title')->whereNull('deleted_at'),
             ],
             'skills' => [
                 'array',
@@ -60,12 +71,14 @@ class CreateUserRequest extends FormRequest
             'email.required' => 'El campo email es obligatorio',
             'email.email' => 'El valor introducido no es un correo electrónico válido',
             'password.required' => 'El campo contraseña es obligatorio',
+            'profession_id.required_without' => 'Seleccione una  profesion o introduzca una',
         ];
     }
 
     public function createUser()
     {
         DB::transaction(function () {
+
             $user = User::create([
                 'first_name' => $this->first_name,
                 'last_name' => $this->last_name,
@@ -78,10 +91,22 @@ class CreateUserRequest extends FormRequest
             $user->profile()->create([
                 'bio' => $this->bio,
                 'twitter' => $this->twitter,
-                'profession_id' => $this->profession_id,
+                'profession_id' => $this->selectProfession(),
             ]);
+
 
             $user->skills()->attach($this->skills ?? []);
         });
+    }
+
+    public function selectProfession()
+    {
+        if (isset($this->other_profession)) {
+            $otherProfession = Profession::create([
+                'title' => $this->other_profession,
+            ]);
+            return $otherProfession->id;
+        }
+        return $this->profession_id;
     }
 }

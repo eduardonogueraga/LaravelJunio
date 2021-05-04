@@ -25,6 +25,10 @@
     </select>
 </div>
 <div class="form-group">
+    <label for="other_profession">Otra profesion:</label>
+    <input type="text" name="other_profession" placeholder="Otra profesion" value="{{ old('other_profession', $user->other_profession)  }}" class="form-control">
+</div>
+<div class="form-group">
     <label for="bio">Biografía:</label>
     <textarea name="bio" placeholder="Biografía" class="form-control">{{ old('bio', $user->profile->bio) }}</textarea>
 </div>
