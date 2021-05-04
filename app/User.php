@@ -68,7 +68,12 @@ class User extends Authenticatable
 
     public function getNameAttribute()
     {
-        return "{$this->first_name} {$this->last_name}";
+        return $this->first_name;
+    }
+
+    public function getLastAttribute()
+    {
+        return $this->last_name;
     }
 
     public function delete() //Redefine el metodo delete

@@ -31,7 +31,7 @@ class UserFilter extends QueryFilter
             'skills' => 'array|exists:skills,id',
             'from' => 'date_format:d/m/Y',
             'to' => 'date_format:d/m/Y',
-            'order' => [new SortableColumn(['first_name', 'email', 'date', 'login'])],  //Crea una instancia de sortcolum y le pasa los campos validos
+            'order' => [new SortableColumn(['first_name', 'last_name','email', 'date', 'login'])],  //Crea una instancia de sortcolum y le pasa los campos validos
         ];
     }
 

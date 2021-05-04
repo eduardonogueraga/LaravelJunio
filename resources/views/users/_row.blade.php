@@ -8,6 +8,7 @@
         <span class="status st-{{ $user->state }}"></span>
         <span class="note">{{ $user->team->name }}</span>
     </th>
+    <th scope="row">{{ $user->last }}</th>
     <td>{{ $user->email }}</td>
     <td>
         <span class="note">{{ $user->created_at->format('d/m/Y') }}</span>
@@ -35,6 +36,6 @@
     </td>
 </tr>
 <tr class="skills">
-    <td colspan="1"><span class="note">{{ $user->profile->profession->title }}</span></td>
+    <td colspan="2"><span class="note">{{ $user->profile->profession->title }}</span></td>
     <td colspan="4"><span class="note">{{ $user->skills->implode('name', ', ') ?: 'Sin habilidades'}}</span></td>
 </tr>
