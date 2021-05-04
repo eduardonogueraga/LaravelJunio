@@ -24,6 +24,7 @@ class UserFilter extends QueryFilter
     public function rules(): array
     {
         return [
+            'team' => 'in:with_team,without_team',
             'search' => 'filled',
             'state' => 'in:active,inactive',
             'role' => 'in:user,admin',
@@ -32,6 +33,15 @@ class UserFilter extends QueryFilter
             'to' => 'date_format:d/m/Y',
             'order' => [new SortableColumn(['first_name', 'email', 'date', 'login'])],  //Crea una instancia de sortcolum y le pasa los campos validos
         ];
+    }
+
+    public function team($query, $team)
+    {
+        if ($team == 'with_team') {
+            return  $query->has('team');
+        } elseif ($team == 'without_team') {
+            return  $query->doesntHave('team');
+        }
     }
 
     public function search($query, $search)
