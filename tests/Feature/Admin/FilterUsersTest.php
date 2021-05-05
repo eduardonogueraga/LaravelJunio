@@ -3,6 +3,7 @@
 namespace Tests\Feature\Admin;
 
 use App\Skill;
+use App\Team;
 use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -143,4 +144,145 @@ class FilterUsersTest extends TestCase
             ->notContains($newestUser)
             ->notContains($newUser);
     }
+
+    /** @test */
+    function filter_users_by_search_and_team()
+    {
+        $team1 = Team::factory()->create();
+
+        $armando1 = User::factory()->create([
+            'first_name' => 'Armando',
+            'last_name' => 'Guerra',
+            'team_id' => $team1->id,
+        ]);
+
+        $armando2 = User::factory()->create([
+            'first_name' => 'Armando',
+            'last_name' => 'Segura',
+        ]);
+
+        $response = $this->get('/usuarios?team=with_team&search=Armando');
+        $response->assertOk();
+
+        $response->assertViewCollection('users')
+        ->contains($armando1)
+        ->notContains($armando2);
+    }
+
+    /** @test */
+    function filter_users_by_search_and_state()
+    {
+        $team = Team::factory()->create();
+        $activeAntonio = User::factory()->create([
+            'first_name' => 'Antonio',
+            'team_id' => $team->id,
+        ]);
+
+        $inactiveAntonio = User::factory()->inactive()->create([
+            'first_name' => 'Antonio',
+        ]);
+
+        $response = $this->get('usuarios?state=active&search=Antonio');
+        $response->assertOk();
+        $response->assertViewCollection('users')
+            ->contains($activeAntonio)
+            ->notContains($inactiveAntonio);
+    }
+
+    /** @test */
+    function filter_users_by_search_and_state_and_team()
+    {
+        $team = Team::factory()->create();
+
+        $kike = User::factory()->create([
+            'first_name' => 'Kike',
+            'last_name' => 'Montilla',
+            'team_id'   => $team->id,
+        ]);
+
+        $kikeInactive = User::factory()->inactive()->create([
+            'first_name' => 'Kike',
+            'last_name' => 'Garcia',
+            'team_id'   => $team->id,
+        ]);
+
+        $kikeNoTeam = User::factory()->create([
+            'first_name' => 'Kike',
+            'last_name' => 'Cocunero',
+        ]);
+
+        $response = $this->get('usuarios?team=with_team&state=active&search=Kike');
+        $response->assertOk();
+        $response->assertViewCollection('users')
+            ->contains($kike)
+            ->notContains($kikeInactive)
+            ->notContains($kikeNoTeam);
+    }
+
+    /** @test */
+    function filter_users_by_state_and_team_and_role()
+    {
+        $team = Team::factory()->create();
+
+        $activeAdmin = User::factory()->create(['role' => 'admin']);
+        $inactive = User::factory()->inactive()->create();
+
+        $activeAdminTeam = User::factory()->create([
+            'team_id' => $team->id,
+            'role' => 'admin'
+        ]);
+
+        $response = $this->get('usuarios?team=with_team&state=active&role=admin');
+        $response->assertOk();
+
+        $response->assertViewCollection('users')
+            ->contains($activeAdminTeam)
+            ->notContains($activeAdmin)
+            ->notContains($inactive);
+    }
+
+    /** @test */
+    function filter_users_by_search_and_team_from()
+    {
+        self::markTestIncomplete();
+        $team1 = Team::factory()->create();
+
+        $oldWithTeam = User::factory()->create([
+            'first_name' => 'Armando',
+            'team_id' => $team1->id,
+            'created_at' => '2019-02-30 23:59:59',
+        ]);
+
+        $oldWithoutTeam = User::factory()->create([
+            'first_name' => 'Armando',
+            'created_at' => '2019-02-30 23:59:59',
+        ]);
+
+        $newWithTeam = User::factory()->create([
+            'first_name' => 'Armando',
+            'team_id' => $team1->id,
+            'created_at' => '2020-10-24 13:59:59',
+        ]);
+
+        $newWithoutTeam = User::factory()->create([
+            'first_name' => 'Armando',
+            'created_at' => '2020-10-24 13:59:59',
+        ]);
+
+        $otherWithTeam = User::factory()->create([
+            'first_name' => 'Kike',
+            'team_id' => $team1->id,
+            'created_at' => '2020-12-24 13:59:59',
+        ]);
+
+        $response = $this->get('/usuarios?team=with_team&search=Armando&from=24%2F10%2F2020&to=');
+        $response->assertOk();
+        $response->assertViewCollection('users')
+            ->contains($newWithTeam)
+            ->notContains($newWithoutTeam)
+            ->notContains($otherWithTeam)
+            ->notContains($oldWithTeam)
+            ->notContains($oldWithoutTeam);
+    }
+
 }
