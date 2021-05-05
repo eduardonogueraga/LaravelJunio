@@ -299,6 +299,23 @@ class CreateUsersTest extends TestCase
     }
 
     /** @test */
+    function the_skills_fields_are_optional()
+    {
+        $profession = Profession::factory()->create();
+        $this->post('/usuarios/', $this->withData([
+            'skills' => [],
+            'profession_id' => $profession->id,
+        ]))->assertRedirect('/usuarios');
+
+        $this->assertDatabaseHas('users', [
+            'email' => 'pepe@mail.es',
+            'role' => 'user',
+        ]);
+
+        $this->assertDatabaseEmpty('skill_user');
+    }
+
+    /** @test */
     function the_skills_must_be_an_array()
     {
         $this->handleValidationExceptions();
