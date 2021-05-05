@@ -334,4 +334,163 @@ class UpdateUsersTest extends TestCase
             'bio' => 'Testing biografy field'
         ]);
     }
+
+    /** @test */
+    function the_profession_id_must_be_valid()
+    {
+        $this->handleValidationExceptions();
+
+        $user = User::factory()->create();
+        $profession = Profession::factory()->create();
+
+        $user->profile()->update([
+            'profession_id' => $profession->id,
+        ]);
+
+        $this->from('/usuarios/'.$user->id.'/editar')
+            ->put('/usuarios/'.$user->id, $this->withData([
+                'profession_id' => 'non-valid-profession'
+            ]))->assertSessionHasErrors(['profession_id'])
+            ->assertRedirect('/usuarios/'.$user->id.'/editar');
+
+        $this->assertDatabaseHas('user_profiles', [
+            'user_id' => $user->id,
+            'profession_id' => $profession->id,
+        ]);
+
+    }
+
+    /** @test */
+    function only_not_deleted_professions_can_be_selected()
+    {
+        $this->handleValidationExceptions();
+
+        $user = User::factory()->create();
+        $profession = Profession::factory()->create();
+        $deletedProfession = Profession::factory()->create([
+            'deleted_at' => now(),
+        ]);
+
+        $user->profile()->update([
+            'profession_id' => $profession->id,
+        ]);
+
+        $this->from('/usuarios/'.$user->id.'/editar')
+            ->put('/usuarios/'.$user->id, $this->withData([
+                'profession_id' => $deletedProfession->id,
+            ]))->assertSessionHasErrors(['profession_id'])
+            ->assertRedirect('/usuarios/'.$user->id.'/editar');
+    }
+
+    /** @test */
+    function the_skills_fields_are_optional()
+    {
+        $user = User::factory()->create();
+        $oldSkill1 = Skill::factory()->create();
+        $oldSkill2 = Skill::factory()->create();
+
+        $user->skills()->attach([$oldSkill1->id, $oldSkill2->id]);
+
+        $this->from('/usuarios/'.$user->id.'/editar')
+            ->put('/usuarios/'.$user->id, $this->withData([
+                'skills' => []
+            ]))->assertRedirect('/usuarios/'.$user->id);
+
+        $this->assertCredentials([
+            'first_name' => 'Pepe',
+            'last_name' => 'Pérez',
+            'email' => 'pepe@mail.es',
+            'password' => '123456',
+        ]);
+
+        $this->assertDatabaseEmpty('skill_user');
+
+    }
+
+    /** @test */
+    function the_skills_must_be_an_array()
+    {
+        $this->handleValidationExceptions();
+        $user = User::factory()->create();
+        $oldSkill = Skill::factory()->create();
+
+        $user->skills()->attach([$oldSkill->id]);
+
+        $this->from('/usuarios/'.$user->id.'/editar')
+            ->put('/usuarios/'.$user->id, $this->withData([
+                'skills' => 'newSkill',
+            ]))->assertSessionHasErrors(['skills'])
+            ->assertRedirect('/usuarios/'.$user->id.'/editar');
+
+        $this->assertDatabaseHas('skill_user', [
+            'user_id' => $user->id,
+            'skill_id' => $oldSkill->id
+        ]);
+    }
+
+    /** @test */
+    function the_skills_must_be_valid()
+    {
+        $this->handleValidationExceptions();
+        $user = User::factory()->create();
+        $oldSkill = Skill::factory()->create();
+        $newSkill = Skill::factory()->create();
+        $user->skills()->attach([$oldSkill->id]);
+
+        $this->from('/usuarios/'.$user->id.'/editar')
+            ->put('/usuarios/'.$user->id, $this->withData([
+                    'skills' => [$oldSkill->id, $newSkill->id+2],
+            ]))->assertSessionHasErrors(['skills'])
+            ->assertRedirect('/usuarios/'.$user->id.'/editar');
+
+        $this->assertDatabaseHas('skill_user', [
+            'user_id' => $user->id,
+            'skill_id' => $oldSkill->id,
+        ]);
+
+        $this->assertDatabaseMissing('skill_user', [
+            'user_id' => $user->id,
+            'skill_id' => $newSkill->id,
+        ]);
+    }
+
+    /** @test */
+    function the_role_field_is_required()
+    {
+        $this->handleValidationExceptions();
+
+        $user = User::factory()->create([
+            'role' => 'admin'
+        ]);
+        $this->from('/usuarios/'.$user->id.'/editar')
+            ->put('/usuarios/'.$user->id, $this->withData([
+                'role' => null,
+            ]))->assertSessionHasErrors(['role'])
+            ->assertRedirect('/usuarios/'.$user->id.'/editar');
+
+        $this->assertDatabaseHas('users', [
+            'role' => 'admin',
+        ]);
+    }
+
+    /** @test */
+    function the_role_field_must_be_valid()
+    {
+        $this->handleValidationExceptions();
+        $user = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $this->from('/usuarios/'.$user->id.'/editar')
+            ->put('/usuarios/'.$user->id, $this->withData([
+                'role' => 'nonValidRole',
+            ]))->assertSessionHasErrors(['role'])
+            ->assertRedirect('/usuarios/'.$user->id.'/editar');
+
+        $this->assertDatabaseHas('users', [
+            'role' => 'admin',
+        ]);
+    }
+
+
 }

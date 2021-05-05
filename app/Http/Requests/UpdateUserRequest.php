@@ -34,7 +34,6 @@ class UpdateUserRequest extends FormRequest
             'bio' => 'required',
             'twitter' => ['nullable', 'present', 'url'],
             'role' => [
-                'nullable',
                 Rule::in(Role::getList())
             ],
             'profession_id' => [
