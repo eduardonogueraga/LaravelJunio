@@ -3,6 +3,7 @@
 namespace Tests\Feature\Admin;
 
 use App\Profession;
+use App\Skill;
 use App\User;
 use App\UserProfile;
 use Tests\TestCase;
@@ -29,6 +30,11 @@ class UserProfileTest extends TestCase
 
         // $this->actingAs($user);
 
+        $skill1= Skill::factory()->create();
+        $skill2= Skill::factory()->create();
+
+        $user->skills()->attach([$skill1->id, $skill2->id]);
+
         $response = $this->get('/editar-perfil/');
         $response->assertStatus(200);
 
@@ -53,6 +59,41 @@ class UserProfileTest extends TestCase
             'bio' => 'Programador de Laravel y Vue.js',
             'twitter' => 'https://twitter.com/pepe',
             'profession_id' => $newProfession->id,
+        ]);
+
+        $this->assertDatabaseCount('skill_user', 2);
+
+        $this->assertDatabaseHas('skill_user', [
+            'user_id' => $user->id,
+            'skill_id' => $skill1->id,
+        ]);
+
+        $this->assertDatabaseHas('skill_user', [
+            'user_id' => $user->id,
+            'skill_id' => $skill2->id,
+        ]);
+    }
+
+    /** @test */
+    function the_user_cannot_change_its_skills()
+    {
+        $user = User::factory()->create();
+        $oldSkill = Skill::factory()->create();
+        $newSkill = Skill::factory()->create();
+        $user->skills()->attach([$oldSkill->id]);
+
+        $response = $this->put('/editar-perfil/', $this->withData(['skills' => [$newSkill->id],]));
+
+        $response->assertRedirect();
+
+        $this->assertDatabaseHas('skill_user', [
+            'user_id' => $user->id,
+            'skill_id' => $oldSkill->id,
+        ]);
+
+        $this->assertDatabaseMissing('skill_user', [
+            'user_id' => $user->id,
+            'skill_id' => $newSkill->id,
         ]);
     }
 
