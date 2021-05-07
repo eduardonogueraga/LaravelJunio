@@ -146,6 +146,23 @@ class FilterUsersTest extends TestCase
     }
 
     /** @test */
+    function filter_users_by_team_name()
+    {
+        $team1 = Team::factory()->create(['name' => 'Empresa Paco']);
+        $team2 = Team::factory()->create(['name' => 'Desatascos Teruel']);
+
+        $user1 = User::factory()->create(['team_id' => $team1->id]);
+        $user2 = User::factory()->create(['team_id' => $team2->id]);
+
+        $response = $this->get('usuarios?teamName=Desatascos Teruel');
+        $response->assertOk();
+        $response->assertViewCollection('users')
+            ->contains($user2)
+            ->notContains($user1);
+    }
+
+
+    /** @test */
     function filter_users_by_search_and_team()
     {
         $team1 = Team::factory()->create();

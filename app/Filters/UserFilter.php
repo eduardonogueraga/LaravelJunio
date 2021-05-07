@@ -5,6 +5,7 @@ namespace App\Filters;
 use App\Login;
 use App\Sortable;
 use App\Rules\SortableColumn;
+use App\Team;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -24,6 +25,7 @@ class UserFilter extends QueryFilter
     public function rules(): array
     {
         return [
+            'teamName' => 'exists:teams,name',
             'team' => 'in:with_team,without_team',
             'search' => 'filled',
             'state' => 'in:active,inactive',
@@ -33,6 +35,13 @@ class UserFilter extends QueryFilter
             'to' => 'date_format:d/m/Y',
             'order' => [new SortableColumn(['first_name', 'last_name','email', 'date', 'login'])],  //Crea una instancia de sortcolum y le pasa los campos validos
         ];
+    }
+
+    public function teamName($query, $teamName)
+    {
+        return $query->whereHas('team', function ($query) use ($teamName){
+            $query->where('name', $teamName);
+        });
     }
 
     public function team($query, $team)

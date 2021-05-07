@@ -68,5 +68,15 @@
             </div>
         </div>
     </div>
+    <div class="col-md-6">
+        <div class="btn-group">
+            <select name="teamName" id="teamName" class="select-field">
+                <option value="" selected disabled hidden>Filtrar por equipo</option>
+                @foreach($teams as $team)
+                    <option value="{{ $team->name }}" {{ request('teamName') ==  $team->name ? 'selected' : '' }}>{{ $team->name }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
 </form>
 

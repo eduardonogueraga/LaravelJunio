@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Profession;
 use App\Skill;
 use App\Sortable;
+use App\Team;
 use App\User;
 use App\UserFilter;
 use Illuminate\Support\Facades\DB;
@@ -29,6 +30,7 @@ class UserController extends Controller
             'users' => $users,
             'view' => request()->routeIs('users.trashed') ? 'trash' : 'index', //Pasa una vista u otra
             'skills' => Skill::orderBy('name')->get(),
+            'teams' => Team::orderBy('name')->get(),
             'checkedSkills' => collect(request('skills')), //Pasa la coleccion de valores validos
             'sortable' => $sortable, //Pasa el obj sortable
         ]);
