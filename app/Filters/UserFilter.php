@@ -25,6 +25,7 @@ class UserFilter extends QueryFilter
     public function rules(): array
     {
         return [
+            'twitter' => 'in:with,without',
             'teamName' => 'exists:teams,name',
             'team' => 'in:with_team,without_team',
             'search' => 'filled',
@@ -35,6 +36,15 @@ class UserFilter extends QueryFilter
             'to' => 'date_format:d/m/Y',
             'order' => [new SortableColumn(['first_name', 'last_name','email', 'date', 'login', 'twitter'])],  //Crea una instancia de sortcolum y le pasa los campos validos
         ];
+    }
+
+    public function twitter($query, $twitter, $operator = '=')
+    {
+        if($twitter == 'with'){$operator ='!=';}
+
+        return $query->whereHas('profile', function ($query) use ($operator){
+            $query->where('twitter',$operator, null);
+        });
     }
 
     public function teamName($query, $teamName)

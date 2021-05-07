@@ -22,6 +22,17 @@
         </div>
     </div>
     <div class="row row-filters">
+        <div class="col-12">
+            @foreach(trans('users.filters.twitter') as $value => $text)
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="twitter" id="twitter_{{ $value }}"
+                           value="{{ $value }}" {{ $value === request('twitter') ? 'checked' : '' }}>
+                    <label class="form-check-label" for="twitter_{{ $value }}">{{ $text }}</label>
+                </div>
+            @endforeach
+        </div>
+    </div>
+    <div class="row row-filters">
         <div class="col-md-6">
             <div class="form-inline form-search">
                 <div class="input-group">

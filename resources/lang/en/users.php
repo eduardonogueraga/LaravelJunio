@@ -12,6 +12,7 @@ return [
     'states' => ['active' => 'Activo', 'inactive' => 'Inactivo'],
     'filters' => [
         'roles' => ['all' => 'Rol', 'admin' => 'Administradores', 'user' => 'Usuarios'],
-        'states' => ['all' => 'Todos', 'active' => 'Solo activos', 'inactive' => 'Solo inactivos']
+        'states' => ['all' => 'Todos', 'active' => 'Solo activos', 'inactive' => 'Solo inactivos'],
+        'twitter' => ['all'=> 'Todos', 'with' => 'Con cuenta', 'without'=> 'Sin cuenta']
     ]
 ];
