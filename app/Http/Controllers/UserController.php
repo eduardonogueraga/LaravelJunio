@@ -19,6 +19,7 @@ class UserController extends Controller
         $users = User::query()
             ->with('team', 'skills', 'profile.profession') //relaciones
             ->withLastLogin() //Pilla subconsula del user query
+            ->withTwitter()
             ->onlyTrashedIf(request()->routeIs('users.trashed'))  //Pilla solo los borrados si se cumple esa ruta
             ->applyFilters() //Aplica los filtros
             ->orderByDesc('created_at') //Ordenacion por defecto

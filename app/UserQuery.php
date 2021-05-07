@@ -16,8 +16,26 @@ class UserQuery extends QueryBuilder
             ->latest() // orderByDesc('created_at')
             ->limit(1);
 
+        return $this->addSubquery($subselect, 'last_login_at');
+    }
+
+    public function withTwitter()
+    {
+        $subselect = UserProfile::select('user_profiles.twitter')
+            ->whereColumn('user_profiles.user_id', 'users.id')
+            ->limit(1);
+
+        return $this->addSubquery($subselect, 'twitter');
+    }
+
+    /**
+     * @param $subselect
+     * @return UserQuery
+     */
+    public function addSubquery($subselect, $as): UserQuery
+    {
         return $this->addSelect([
-            'last_login_at' => $subselect, //Tiene que declararse como alias en las rules del filtro
+            $as => $subselect, //El alias tiene que declararse como alias en las rules del filtro
         ]);
     }
 }

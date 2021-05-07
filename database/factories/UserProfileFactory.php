@@ -23,6 +23,7 @@ class UserProfileFactory extends Factory
     {
         return [
             'bio' => $this->faker->paragraph,
+            'twitter' => 'https://twitter.com/'. $this->faker->userName,
         ];
     }
 }

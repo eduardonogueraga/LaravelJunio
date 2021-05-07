@@ -68,8 +68,15 @@ class UserSeeder extends Seeder
             'profession_id' => rand(0, 2) ? $this->professions->random()->id : null,
         ]);
 
+        if(!rand(0, 2)) {
+            $user->profile()->update([
+                'twitter' => null,
+            ]);
+        }
+
         Login::factory()->times(rand(1, 10))->create([
             'user_id' => $user->id,
         ]);
     }
+
 }

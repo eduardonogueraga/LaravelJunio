@@ -26,6 +26,7 @@
                 <th scope="col"># <span class="oi oi-caret-bottom"></span><span class="oi oi-caret-top"></span></th>
                 <th scope="col"><a href="{{ $sortable->url('first_name') }}" class="{{ $sortable->classes('first_name') }}">Nombre</a></th>
                 <th scope="col"><a href="{{ $sortable->url('last_name') }}" class="{{ $sortable->classes('last_name') }}">Apellido</a></th>
+                <th scope="col"><a href="{{ $sortable->url('twitter') }}" class="{{ $sortable->classes('twitter') }}">Twitter</a></th>
                 <th scope="col"><a href="{{ $sortable->url('email') }}" class="{{ $sortable->classes('email') }}">Correo</a></th>
                 <th scope="col"><a href="{{ $sortable->url('date') }}" class="{{ $sortable->classes('date') }}">Registrado el</a></th>
                 <th scope="col"><a href="{{ $sortable->url('login') }}" class="{{ $sortable->classes('login') }}">Último login</a></th>
