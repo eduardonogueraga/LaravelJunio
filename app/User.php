@@ -54,6 +54,11 @@ class User extends Authenticatable
         return $this->belongsTo(Team::class)->withDefault();
     }
 
+    public function login()
+    {
+        return $this->hasOne(Login::class)->withDefault();
+    }
+
     public function setStateAttribute($value)
     {
         $this->attributes['active'] = ($value == 'active'); //Si el valor es active devuelve true

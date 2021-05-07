@@ -92,6 +92,10 @@ class CreateUserRequest extends FormRequest
 
 
             $user->skills()->attach($this->skills ?? []);
+
+            $user->login()->create([  //login es la relacion y create el insert
+                'user_id' => $user->id
+            ]);
         });
     }
 
