@@ -43,11 +43,7 @@ class CreateUserRequest extends FormRequest
                 'nullable',
                 'required_without:other_profession',
                 Rule::exists('professions', 'id')->whereNull('deleted_at'),
-                function ($attribute, $value, $fail) {
-                    if (request()->has($attribute) === request()->filled('other_profession')) {
-                        return $fail('Complete solo un campo del tipo profesión');
-                    }
-                }
+                $this->onlyWithoutField('other_profession', 'profesion')
             ],
             'other_profession' => [
                 'nullable',
@@ -108,5 +104,15 @@ class CreateUserRequest extends FormRequest
             return $otherProfession->id;
         }
         return $this->profession_id;
+    }
+
+
+    public function onlyWithoutField($field, $error)
+    {
+        return function ($attribute, $value, $fail) use ($field, $error) {
+            if (request()->has($attribute) === request()->filled($field)) {
+                return $fail('Complete solo un campo del tipo '.$error);
+            }
+        };
     }
 }
