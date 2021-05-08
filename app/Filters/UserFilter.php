@@ -67,9 +67,9 @@ class UserFilter extends QueryFilter
     {
         return $query->whereRaw('CONCAT(first_name, " ", last_name) like ?', "%$search%")
             ->orWhere('email', 'like', "%$search%")
-            ->orWhereHas('team', function ($query) use ($search) {
-                $query->where('name', 'like', "%{$search}%");
-            });
+            ->orWhereHas('team', $this->subQuery($search, 'name'))
+            ->orWhereHas('profile', $this->subQuery($search, 'twitter'))
+            ->orWhereHas('profile.profession', $this->subQuery($search, 'title'));
     }
 
     public function state($query, $state)
@@ -109,5 +109,13 @@ class UserFilter extends QueryFilter
         [$column, $direction] = Sortable::info($value); //Se le envia el nombre del campo a sortear (first_name)
 
         $query->orderBy($this->getColumnName($column), $direction); //Si la columna tiene alias lo cambia sino nada
+    }
+
+
+    public function subQuery($search, $column) //Refactorizacion de mis orWhereHas
+    {
+        return function ($query) use ($search, $column) {
+            $query->where($column, 'like', "%{$search}%");
+        };
     }
 }

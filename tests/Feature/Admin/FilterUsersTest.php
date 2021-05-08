@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Admin;
 
+use App\Profession;
 use App\Skill;
 use App\Team;
 use App\User;
@@ -144,6 +145,58 @@ class FilterUsersTest extends TestCase
             ->notContains($newestUser)
             ->notContains($newUser);
     }
+
+    /** @test */
+    function filter_user_by_searching_twitter()
+    {
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create();
+
+        $user1->profile()->update([
+            'twitter' => ' 	https://twitter.com/pepe',
+        ]);
+
+        $user2->profile()->update([
+            'twitter' => ' 	https://twitter.com/jose',
+        ]);
+
+        $response = $this->get('usuarios?search=pepe');
+        $response->assertOk();
+        $response->assertViewCollection('users')
+            ->contains($user1)
+            ->notContains($user2);
+    }
+
+    /** @test */
+    function filter_user_by_searching_profession_title()
+    {
+        $profession1 = Profession::factory()->create([
+            'title' => 'Camionero',
+        ]);
+
+        $profession2 = Profession::factory()->create([
+            'title' => 'Tractorista',
+        ]);
+
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create();
+
+        $user1->profile()->update([
+            'profession_id' => $profession1->id,
+        ]);
+
+        $user2->profile()->update([
+            'profession_id' => $profession2->id,
+        ]);
+
+        $response = $this->get('usuarios?search=Tractor');
+        $response->assertOk();
+        $response->assertViewCollection('users')
+            ->contains($user2)
+            ->notContains($user1);
+
+    }
+
 
     /** @test */
     function filter_users_by_team_name()
