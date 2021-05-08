@@ -13,6 +13,13 @@
 <p>Equipo: {{($user->team->name)?: 'Sin equipo'}}</p>
 <p>Hablidades: {{($user->skills->implode('name', ','))?: 'Sin habilidades'}}</p>
 
+<h2>Direcciones</h2>
+<p>Region: {{$user->address->region}}</p>
+<p>Ciudad: {{$user->address->city}}</p>
+<p>Direccion o calle: {{$user->address->street}}</p>
+<p>País: {{$user->address->country}}</p>
+<p>Código postal: {{$user->address->zipcode}}</p>
+
 <p>
     <a href="{{ route('users.index') }}">Regresar al listado de usuarios</a>
 </p>

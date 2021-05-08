@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Address;
 use App\User;
 use App\UserProfile;
 use Illuminate\Support\Str;
@@ -20,6 +21,7 @@ class UserFactory extends Factory
     {
         return $this->afterCreating(function ($user) {
             $user->profile()->save(UserProfile::factory()->make());
+            $user->address()->save(Address::factory()->make());
         });
     }
 

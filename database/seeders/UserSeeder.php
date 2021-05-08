@@ -52,6 +52,15 @@ class UserSeeder extends Seeder
             'bio' => 'Programador',
             'profession_id' => $this->professions->where('title', 'Desarrollador Back-End')->first()->id,
         ]);
+
+        $admin->address()->create([
+            'region' => 'Murcia',
+            'city' => 'Alhama',
+            'street' => 'Calle de los carmelitas',
+            'country' => 'Spain',
+            'zipcode' => '30300',
+        ]);
+
     }
 
     public function createRandomUser()

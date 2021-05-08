@@ -39,6 +39,11 @@ class User extends Authenticatable
         return $this->role === 'admin';
     }
 
+    public function address()
+    {
+        return $this->hasOne(Address::class)->withDefault();
+    }
+
     public function profile()
     {
         return $this->hasOne(UserProfile::class)->withDefault();
