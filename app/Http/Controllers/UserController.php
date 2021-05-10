@@ -70,7 +70,7 @@ class UserController extends Controller
     {
         $user = User::onlyTrashed()->where('id', $id)->firstOrFail();
 
-        $user->forceDelete();
+        $user->forceDelete(); //Borrara lo relacionado si las claves foraneas de id tiene el cascade
 
         return redirect()->route('users.trashed');
     }
@@ -78,7 +78,8 @@ class UserController extends Controller
     public function trash(User $user)
     {
         $user->profile()->delete();
-        $user->delete();
+        $user->address()->delete();
+        $user->delete(); //Van en el modelo la redefinicion del padre
 
         return redirect()->route('users.index');
     }
@@ -87,6 +88,7 @@ class UserController extends Controller
     {
         $user = User::onlyTrashed()->where('id', $id)->firstOrFail();
         $user->profile()->restore();
+        $user->address()->restore();
         $user->restore();
 
         return redirect()->route('users.index');

@@ -91,6 +91,7 @@ class User extends Authenticatable
         DB::transaction(function () {
             if (parent::delete()) { //SI  se hace un borrado padre
                 $this->profile()->delete();
+                $this->address()->delete();
 
                 DB::table('skill_user')
                     ->where('user_id', $this->id)

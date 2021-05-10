@@ -16,7 +16,7 @@ class CreateAddressesTable extends Migration
             $table->string('country');
             $table->string('zipcode');
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade'); //Para que si usuario se borra se eliminen todas sus dependencias
             $table->timestamps();
             $table->softDeletes();
         });
