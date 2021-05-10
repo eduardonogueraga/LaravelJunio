@@ -28,6 +28,32 @@
     <label for="other_profession">Otra profesion:</label>
     <input type="text" name="other_profession" placeholder="Otra profesion" value="{{ old('other_profession', $user->other_profession)  }}" class="form-control">
 </div>
+
+<div class="form-group">
+    <label for="region">Region o estado:</label>
+    <input type="text" name="region" placeholder="Estado" value="{{ old('region', $user->address->region) }}" class="form-control">
+</div>
+
+<div class="form-group">
+    <label for="city">Ciudad:</label>
+    <input type="text" name="city" placeholder="Ciudad" value="{{ old('city', $user->address->city) }}" class="form-control">
+</div>
+
+<div class="form-group">
+    <label for="street">Calle:</label>
+    <input type="text" name="street" placeholder="Calle" value="{{ old('street', $user->address->street) }}" class="form-control">
+</div>
+
+<div class="form-group">
+    <label for="country">País:</label>
+    <input type="text" name="country" placeholder="País" value="{{ old('country', $user->address->country) }}" class="form-control">
+</div>
+
+<div class="form-group">
+    <label for="zipcode">Código psotal:</label>
+    <input type="text" name="zipcode" placeholder="Código psotal" value="{{ old('zipcode', $user->address->zipcode) }}" class="form-control">
+</div>
+
 <div class="form-group">
     <label for="bio">Biografía:</label>
     <textarea name="bio" placeholder="Biografía" class="form-control">{{ old('bio', $user->profile->bio) }}</textarea>

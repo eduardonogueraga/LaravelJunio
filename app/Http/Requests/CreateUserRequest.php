@@ -33,6 +33,11 @@ class CreateUserRequest extends FormRequest
             'last_name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required',
+            'region' => 'required',
+            'city' => 'required',
+            'street' => 'required',
+            'country' => 'required',
+            'zipcode' => 'required',
             'bio' => 'required',
             'twitter' => ['nullable', 'present', 'url'],
             'role' => [
@@ -90,6 +95,13 @@ class CreateUserRequest extends FormRequest
                 'profession_id' => $this->selectProfession(),
             ]);
 
+            $user->address()->create([
+                'region' => $this->region,
+                'city' => $this->city,
+                'street' => $this->street,
+                'country' => $this->country,
+                'zipcode' => $this->zipcode,
+            ]);
 
             $user->skills()->attach($this->skills ?? []);
 

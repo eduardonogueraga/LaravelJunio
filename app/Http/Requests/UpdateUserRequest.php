@@ -31,6 +31,11 @@ class UpdateUserRequest extends FormRequest
             'last_name' => 'required',
             'email' => 'required|email|unique:users,email,'.$this->user->id,
             'password' => '',
+            'region' => 'required',
+            'city' => 'required',
+            'street' => 'required',
+            'country' => 'required',
+            'zipcode' => 'required',
             'bio' => 'required',
             'twitter' => ['nullable', 'present', 'url'],
             'role' => [
@@ -70,6 +75,14 @@ class UpdateUserRequest extends FormRequest
             'bio' => $this->bio,
             'twitter' => $this->twitter,
             'profession_id' => $this->profession_id,
+        ]);
+
+        $user->address()->update([
+            'region' => $this->region,
+            'city' => $this->city,
+            'street' => $this->street,
+            'country' => $this->country,
+            'zipcode' => $this->zipcode,
         ]);
 
         $user->skills()->sync($this->skills ?: []);
