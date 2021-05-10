@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Country;
 use App\Profession;
 use App\Role;
 use App\Rules\UserRequestRules;
@@ -38,7 +39,10 @@ class UpdateUserRequest extends FormRequest
             'region' => 'required',
             'city' => 'required',
             'street' => 'required',
-            'country' => 'required',
+            'country_id' => [
+                'required',
+                Rule::exists('countries', 'id')->whereNull('deleted_at'),
+            ],
             'zipcode' => 'required',
             'bio' => 'required',
             'twitter' => ['nullable', 'present', 'url'],
@@ -91,7 +95,7 @@ class UpdateUserRequest extends FormRequest
             'region' => $this->region,
             'city' => $this->city,
             'street' => $this->street,
-            'country' => $this->country,
+            'country' => Country::find($this->country_id)->country,
             'zipcode' => $this->zipcode,
         ]);
 

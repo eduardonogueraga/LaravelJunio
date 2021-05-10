@@ -2,6 +2,8 @@
 
 namespace Tests;
 
+use App\Country;
+use App\Profession;
 use Illuminate\Support\Str;
 
 trait TestHelpers
@@ -33,11 +35,20 @@ trait TestHelpers
 
     public function withData(array $custom = [])
     {
-        return array_merge($this->defaultData(), $custom);
+        return array_merge($this->withOtherData(), $custom);
     }
 
     protected function defaultData()
     {
         return $this->defaultData;
+    }
+
+    protected function withOtherData()
+    {
+        $country = Country::factory()->create();
+
+        return array_merge($this->defaultData(), [
+            'country_id' => $country->id,
+        ]);
     }
 }

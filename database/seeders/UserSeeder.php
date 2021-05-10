@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Country;
 use App\User;
 use App\Profession;
 use App\Skill;
@@ -14,6 +15,7 @@ class UserSeeder extends Seeder
     private $professions;
     private $skills;
     private $teams;
+    private $countries;
 
     public function run()
     {
@@ -31,6 +33,7 @@ class UserSeeder extends Seeder
         $this->professions = Profession::all();
         $this->skills = Skill::all();
         $this->teams = Team::all();
+        $this->countries = Country::all();
     }
 
     public function createAdmin()
@@ -75,6 +78,10 @@ class UserSeeder extends Seeder
 
         $user->profile()->update([
             'profession_id' => rand(0, 2) ? $this->professions->random()->id : null,
+        ]);
+
+        $user->address()->update([ //Remplaza el defecto por los validos de la base de datos
+            'country' => $this->countries->random()->country,
         ]);
 
         if(!rand(0, 2)) {

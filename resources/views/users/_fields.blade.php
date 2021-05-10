@@ -45,8 +45,14 @@
 </div>
 
 <div class="form-group">
-    <label for="country">País:</label>
-    <input type="text" name="country" placeholder="País" value="{{ old('country', $user->address->country) }}" class="form-control">
+    <label for="country_id">País: </label>
+    <select name="country_id" id="country_id" class="form-control">
+        <option value="">Selecciona una opción</option>
+        @foreach($countries as $value)
+            <option value="{{ $value->id }}" {{ ((old('country_id', $user->address->country) == $value->country )
+            || (old('country_id', $user->address->country) == $value->id )) ? ' selected' : '' }}>{{ $value->country }}</option>
+        @endforeach
+    </select>
 </div>
 
 <div class="form-group">

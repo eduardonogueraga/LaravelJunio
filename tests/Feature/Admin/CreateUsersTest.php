@@ -22,7 +22,7 @@ class CreateUsersTest extends TestCase
         'region' => 'Murcia',
         'city' => 'Alhama',
         'street' => 'Calle de los carmelitas',
-        'country' => 'Spain',
+        'country_id' => '',
         'zipcode' => '30300',
         'bio' => 'Programador de Laravel y Vue.js',
         'twitter' => 'https://twitter.com/pepe',

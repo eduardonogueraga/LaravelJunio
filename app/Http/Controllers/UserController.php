@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Country;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Profession;
@@ -99,6 +100,7 @@ class UserController extends Controller
         return view($view, [
             'professions' => Profession::orderBy('title', 'ASC')->get(),
             'skills' => Skill::orderBy('name', 'ASC')->get(),
+            'countries' => Country::orderBy('country', 'ASC')->get(),
             'user' => $user,
         ]);
     }
