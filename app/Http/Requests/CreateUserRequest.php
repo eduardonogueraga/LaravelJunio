@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Profession;
 use App\Role;
+use App\Rules\UserRequestRules;
 use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
@@ -11,6 +12,7 @@ use Illuminate\Validation\Rule;
 
 class CreateUserRequest extends FormRequest
 {
+    use UserRequestRules;
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -111,24 +113,4 @@ class CreateUserRequest extends FormRequest
         });
     }
 
-    public function selectProfession()
-    {
-        if (isset($this->other_profession)) {
-            $otherProfession = Profession::create([
-                'title' => $this->other_profession,
-            ]);
-            return $otherProfession->id;
-        }
-        return $this->profession_id;
-    }
-
-
-    public function onlyWithoutField($field, $error)
-    {
-        return function ($attribute, $value, $fail) use ($field, $error) {
-            if (request()->has($attribute) === request()->filled($field)) {
-                return $fail('Complete solo un campo del tipo '.$error);
-            }
-        };
-    }
 }

@@ -20,6 +20,7 @@ class UpdateUsersTest extends TestCase
         'email' => 'pepe@mail.es',
         'password' => '123456',
         'profession_id' => '',
+        'other_profession' => '',
         'region' => 'Murcia',
         'city' => 'Alhama',
         'street' => 'Calle de los carmelitas',
@@ -101,13 +102,16 @@ class UpdateUsersTest extends TestCase
     /** @test */
     function it_detaches_all_the_skills_if_none_is_checked()
     {
+        $profession = Profession::factory()->create();
         $user = User::factory()->create();
 
         $oldSkill1 = Skill::factory()->create();
         $oldSkill2 = Skill::factory()->create();
         $user->skills()->attach([$oldSkill1->id, $oldSkill2->id]);
 
-        $this->put('/usuarios/'.$user->id, $this->withData())
+        $this->put('/usuarios/'.$user->id, $this->withData([
+            'profession_id' => $profession->id
+        ]))
             ->assertRedirect('/usuarios/'.$user->id);
 
         $this->assertDatabaseEmpty('skill_user');
@@ -200,6 +204,7 @@ class UpdateUsersTest extends TestCase
     /** @test */
     function the_user_email_can_stay_the_same()
     {
+        $profession = Profession::factory()->create();
         $user = User::factory()->create([
             'email' => 'pepe@mail.es',
         ]);
@@ -207,6 +212,7 @@ class UpdateUsersTest extends TestCase
         $this->from('/usuarios/'. $user->id .'/editar')
             ->put('/usuarios/'.$user->id, $this->withData([
                 'email' => 'pepe@mail.es',
+                'profession_id' => $profession->id
             ]))->assertRedirect('/usuarios/'. $user->id);
 
         $this->assertDatabaseHas('users', [
@@ -219,6 +225,7 @@ class UpdateUsersTest extends TestCase
     /** @test */
     function the_password_is_optional()
     {
+        $profession = Profession::factory()->create();
         $oldPassword = 'CLAVE ANTERIOR';
         $user = User::factory()->create([
             'password' => bcrypt($oldPassword)
@@ -227,6 +234,7 @@ class UpdateUsersTest extends TestCase
         $this->from('/usuarios/'. $user->id .'/editar')
             ->put('/usuarios/'.$user->id, $this->withData([
                 'password' => '',
+                'profession_id' => $profession->id
             ]))->assertRedirect('/usuarios/'. $user->id);
 
         $this->assertCredentials([
@@ -272,6 +280,7 @@ class UpdateUsersTest extends TestCase
     /** @test */
     function the_twitter_field_can_be_updated_empty()
     {
+        $profession = Profession::factory()->create();
         $user = User::factory()->create();
         $user->profile()->update([
             'twitter' => 'https://twitter.com/antonio',
@@ -280,6 +289,7 @@ class UpdateUsersTest extends TestCase
       $this->from('/usuarios/'.$user->id.'/editar')
           ->put('/usuarios/'. $user->id, $this->withData([
               'twitter' => '',
+              'profession_id' => $profession->id
           ]))->assertRedirect('/usuarios/'.$user->id);
 
       $this->assertCredentials([
@@ -390,6 +400,7 @@ class UpdateUsersTest extends TestCase
     /** @test */
     function the_skills_fields_are_optional()
     {
+        $profession = Profession::factory()->create();
         $user = User::factory()->create();
         $oldSkill1 = Skill::factory()->create();
         $oldSkill2 = Skill::factory()->create();
@@ -398,7 +409,8 @@ class UpdateUsersTest extends TestCase
 
         $this->from('/usuarios/'.$user->id.'/editar')
             ->put('/usuarios/'.$user->id, $this->withData([
-                'skills' => []
+                'skills' => [],
+                'profession_id' => $profession->id
             ]))->assertRedirect('/usuarios/'.$user->id);
 
         $this->assertCredentials([

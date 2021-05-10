@@ -2,13 +2,17 @@
 
 namespace App\Http\Requests;
 
+use App\Profession;
 use App\Role;
+use App\Rules\UserRequestRules;
 use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class UpdateUserRequest extends FormRequest
 {
+    use UserRequestRules;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -43,7 +47,13 @@ class UpdateUserRequest extends FormRequest
             ],
             'profession_id' => [
                 'nullable', 'present',
-                Rule::exists('professions', 'id')->whereNull('deleted_at')
+                'required_without:other_profession',
+                Rule::exists('professions', 'id')->whereNull('deleted_at'),
+                $this->onlyWithoutField('other_profession', 'profesion')
+            ],
+            'other_profession' => [
+                'nullable',
+                Rule::unique('professions', 'title')->whereNull('deleted_at'),
             ],
             'skills' => [
                 'array',
@@ -74,7 +84,7 @@ class UpdateUserRequest extends FormRequest
         $user->profile->update([
             'bio' => $this->bio,
             'twitter' => $this->twitter,
-            'profession_id' => $this->profession_id,
+            'profession_id' => $this->selectProfession(),
         ]);
 
         $user->address()->update([
@@ -87,4 +97,5 @@ class UpdateUserRequest extends FormRequest
 
         $user->skills()->sync($this->skills ?: []);
     }
+
 }
