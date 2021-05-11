@@ -11,4 +11,9 @@ class Address extends Model
     use SoftDeletes, HasFactory;
 
     protected $guarded = [];
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class)->withDefault();
+    }
 }

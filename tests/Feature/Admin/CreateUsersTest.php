@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Admin;
 
+use App\Country;
 use App\Profession;
 use App\Skill;
 use App\User;
@@ -169,7 +170,6 @@ class CreateUsersTest extends TestCase
     function the_email_must_be_unique()
     {
         $this->handleValidationExceptions();
-
         User::factory()->create([
             'email' => 'pepe@mail.es',
         ]);

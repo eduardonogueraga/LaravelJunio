@@ -100,7 +100,7 @@ class UserController extends Controller
         return view($view, [
             'professions' => Profession::orderBy('title', 'ASC')->get(),
             'skills' => Skill::orderBy('name', 'ASC')->get(),
-            'countries' => Country::orderBy('country', 'ASC')->get(),
+            'countries' => Country::orderBy('name', 'ASC')->get(),
             'user' => $user,
         ]);
     }

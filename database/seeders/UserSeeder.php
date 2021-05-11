@@ -60,7 +60,7 @@ class UserSeeder extends Seeder
             'region' => 'Murcia',
             'city' => 'Alhama',
             'street' => 'Calle de los carmelitas',
-            'country' => 'Spain',
+            'country_id' => Country::create(['name' => 'Spain'])->id,
             'zipcode' => '30300',
         ]);
 
@@ -81,7 +81,7 @@ class UserSeeder extends Seeder
         ]);
 
         $user->address()->update([ //Remplaza el defecto por los validos de la base de datos
-            'country' => $this->countries->random()->country,
+            'country_id' => $this->countries->random()->id,
         ]);
 
         if(!rand(0, 2)) {

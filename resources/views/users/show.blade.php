@@ -17,7 +17,7 @@
 <p>Region: {{$user->address->region}}</p>
 <p>Ciudad: {{$user->address->city}}</p>
 <p>Direccion o calle: {{$user->address->street}}</p>
-<p>País: {{$user->address->country}}</p>
+<p>País: {{$user->address->country->name}}</p>
 <p>Código postal: {{$user->address->zipcode}}</p>
 
 <p>

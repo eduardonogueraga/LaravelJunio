@@ -10,4 +10,6 @@ class Country extends Model
 {
     use SoftDeletes, HasFactory;
 
+    protected $guarded = [];
+
 }

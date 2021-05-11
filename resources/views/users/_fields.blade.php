@@ -48,9 +48,8 @@
     <label for="country_id">País: </label>
     <select name="country_id" id="country_id" class="form-control">
         <option value="">Selecciona una opción</option>
-        @foreach($countries as $value)
-            <option value="{{ $value->id }}" {{ ((old('country_id', $user->address->country) == $value->country )
-            || (old('country_id', $user->address->country) == $value->id )) ? ' selected' : '' }}>{{ $value->country }}</option>
+        @foreach($countries as $country)
+            <option value="{{ $country->id }}" {{(old('country_id', $user->address->country->id) == $country->id ) ? ' selected' : '' }}>{{ $country->name }}</option>
         @endforeach
     </select>
 </div>

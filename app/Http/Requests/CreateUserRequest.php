@@ -105,7 +105,7 @@ class CreateUserRequest extends FormRequest
                 'region' => $this->region,
                 'city' => $this->city,
                 'street' => $this->street,
-                'country' => Country::find($this->country_id)->country,
+                'country_id' => $this->country_id,
                 'zipcode' => $this->zipcode,
             ]);
 
