@@ -7,6 +7,7 @@
         @endif
         <span class="status st-{{ $user->state }}"></span>
         <span class="note">{{ $user->team->name }}</span>
+        <span class="note">{{ $user->address->country->name }}</span>
     </th>
     <th scope="row">{{ $user->last }}</th>
     <td>{{ ($user->profile->twitter) ?: 'Sin cuenta de twitter' }}</td>

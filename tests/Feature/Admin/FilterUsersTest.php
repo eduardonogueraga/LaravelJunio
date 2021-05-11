@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Admin;
 
+use App\Country;
 use App\Profession;
 use App\Skill;
 use App\Team;
@@ -212,6 +213,29 @@ class FilterUsersTest extends TestCase
         $response->assertViewCollection('users')
             ->contains($user2)
             ->notContains($user1);
+    }
+
+    /** @test */
+    function filters_users_by_their_country()
+    {
+        $country1 = Country::factory()->create(['name' => 'Afghanistan']);
+        $country2 = Country::factory()->create(['name' => 'Tuvalu']);
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create();
+
+        $user1->address()->update([
+            'country_id' => $country1->id,
+        ]);
+
+        $user2->address()->update([
+            'country_id' => $country2->id,
+        ]);
+
+        $response = $this->get('usuarios?country=Afghanistan');
+        $response->assertOk();
+        $response->assertViewCollection('users')
+            ->contains($user1)
+            ->notContains($user2);
     }
 
 

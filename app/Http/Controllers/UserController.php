@@ -18,7 +18,7 @@ class UserController extends Controller
     public function index(Sortable $sortable)
     {
         $users = User::query()
-            ->with('team', 'skills', 'profile.profession') //relaciones
+            ->with('team', 'skills', 'profile.profession', 'address.country') //relaciones
             ->withLastLogin() //Pilla subconsula del user query
             ->withTwitter()
             ->onlyTrashedIf(request()->routeIs('users.trashed'))  //Pilla solo los borrados si se cumple esa ruta
@@ -33,6 +33,7 @@ class UserController extends Controller
             'view' => request()->routeIs('users.trashed') ? 'trash' : 'index', //Pasa una vista u otra
             'skills' => Skill::orderBy('name')->get(),
             'teams' => Team::orderBy('name')->get(),
+            'countries' => Country::orderBy('name')->get(),
             'checkedSkills' => collect(request('skills')), //Pasa la coleccion de valores validos
             'sortable' => $sortable, //Pasa el obj sortable
         ]);

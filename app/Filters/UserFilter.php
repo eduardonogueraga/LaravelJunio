@@ -25,6 +25,7 @@ class UserFilter extends QueryFilter
     public function rules(): array
     {
         return [
+            'country' => 'exists:countries,name',
             'twitter' => 'in:with,without',
             'teamName' => 'exists:teams,name',
             'team' => 'in:with_team,without_team',
@@ -36,6 +37,13 @@ class UserFilter extends QueryFilter
             'to' => 'date_format:d/m/Y',
             'order' => [new SortableColumn(['first_name', 'last_name','email', 'date', 'login', 'twitter'])],  //Crea una instancia de sortcolum y le pasa los campos validos
         ];
+    }
+
+    public function country($query, $country)
+    {
+        return $query->whereHas('address.country', function ($query) use ($country){
+            $query->where('name', $country);
+        });
     }
 
     public function twitter($query, $twitter, $operator = '=')

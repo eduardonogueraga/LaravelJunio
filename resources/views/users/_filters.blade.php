@@ -79,15 +79,28 @@
             </div>
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="btn-group">
-            <select name="teamName" id="teamName" class="select-field">
-                <option value="" selected disabled hidden>Filtrar por equipo</option>
-                @foreach($teams as $team)
-                    <option value="{{ $team->name }}" {{ request('teamName') ==  $team->name ? 'selected' : '' }}>{{ $team->name }}</option>
-                @endforeach
-            </select>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="btn-group">
+                <select name="teamName" id="teamName" class="select-field">
+                    <option value="" selected disabled hidden>Filtrar por equipo</option>
+                    @foreach($teams as $team)
+                        <option value="{{ $team->name }}" {{ request('teamName') ==  $team->name ? 'selected' : '' }}>{{ $team->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        <div class="col-md-6 text-left">
+            <div class="btn-group">
+                <select name="country" id="country" class="select-field">
+                    <option value="" selected disabled hidden>Filtrar por pais</option>
+                    @foreach($countries as $country)
+                        <option value="{{ $country->name }}" {{ request('country') ==  $country->name ? 'selected' : '' }}>{{ $country->name }}</option>
+                    @endforeach
+                </select>
+            </div>
         </div>
     </div>
+
 </form>
 
