@@ -13,7 +13,7 @@
     <td>{{ ($user->profile->twitter) ?: 'Sin cuenta de twitter' }}</td>
     <td>{{ $user->email }}</td>
     <td>
-        <span class="note">{{ $user->created_at->format('d/m/Y') }}</span>
+        <span class="note">{{ $user->created_at->format('d/m/Y h:ia') }}</span>
     </td>
     <td>
         <span class="note">{{ optional($user->last_login_at)->format('d/m/Y h:ia') ?: 'N/A' }}</span>
