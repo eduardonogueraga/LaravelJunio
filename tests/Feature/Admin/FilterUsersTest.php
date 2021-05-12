@@ -263,6 +263,24 @@ class FilterUsersTest extends TestCase
 
     }
 
+    /** @test */
+    function filter_users_by_occupation()
+    {
+        $profession = Profession::factory()->create();
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create();
+        $user2->profile->update([
+            'profession_id' => $profession->id,
+        ]);
+
+        $response = $this->get('usuarios?occupation=employed');
+        $response->assertOk();
+        $response->assertViewCollection('users')
+            ->contains($user2)
+            ->notContains($user1);
+
+    }
+
 
     /** @test */
     function filter_users_by_search_and_team()

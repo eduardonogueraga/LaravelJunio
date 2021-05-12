@@ -25,6 +25,7 @@ class UserFilter extends QueryFilter
     public function rules(): array
     {
         return [
+            'occupation' => 'in:employed,unemployed',
             'profession' => 'exists:professions,title',
             'country' => 'exists:countries,name',
             'twitter' => 'in:with,without',
@@ -38,6 +39,15 @@ class UserFilter extends QueryFilter
             'to' => 'date_format:d/m/Y',
             'order' => [new SortableColumn(['first_name', 'last_name','email', 'date', 'login', 'twitter'])],  //Crea una instancia de sortcolum y le pasa los campos validos
         ];
+    }
+
+    public function occupation($query, $occupation, $operator = '=')
+    {
+        if($occupation == 'employed'){$operator = '!=';}
+
+        return $query->whereHas('profile', function ($query) use ($operator){
+            return $query->where('profession_id', $operator, null);
+        });
     }
 
     public function profession($query, $profession)

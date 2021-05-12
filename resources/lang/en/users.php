@@ -13,6 +13,7 @@ return [
     'filters' => [
         'roles' => ['all' => 'Rol', 'admin' => 'Administradores', 'user' => 'Usuarios'],
         'states' => ['all' => 'Todos', 'active' => 'Solo activos', 'inactive' => 'Solo inactivos'],
-        'twitter' => ['all'=> 'Todos', 'with' => 'Con cuenta', 'without'=> 'Sin cuenta']
+        'twitter' => ['all'=> 'Todos', 'with' => 'Con cuenta', 'without'=> 'Sin cuenta'],
+        'occupation' => ['all' => 'Todos', 'employed' => 'Con trabajo', 'unemployed' => 'Sin trabajo']
     ]
 ];

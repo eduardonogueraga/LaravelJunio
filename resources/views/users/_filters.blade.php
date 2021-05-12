@@ -33,6 +33,17 @@
         </div>
     </div>
     <div class="row row-filters">
+        <div class="col-12">
+            @foreach(trans('users.filters.occupation') as $value => $text)
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="occupation" id="occupation_{{ $value }}"
+                           value="{{ $value }}" {{ $value === request('occupation') ? 'checked' : '' }}>
+                    <label class="form-check-label" for="occupation_{{ $value }}">{{ $text }}</label>
+                </div>
+            @endforeach
+        </div>
+    </div>
+    <div class="row row-filters">
         <div class="col-md-6">
             <div class="form-inline form-search">
                 <div class="input-group">
