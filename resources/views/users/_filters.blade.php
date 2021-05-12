@@ -90,7 +90,17 @@
                 </select>
             </div>
         </div>
-        <div class="col-md-6 text-left">
+        <div class="col-md-4 ">
+            <div class="btn-group">
+                <select name="profession" id="profession" class="select-field">
+                    <option value="" selected disabled hidden>Filtrar por profession</option>
+                    @foreach($professions as $profession)
+                        <option value="{{ $profession->title }}" {{ request('profession') ==  $profession->title ? 'selected' : '' }}>{{ $profession->title }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        <div class="col-md-4 ">
             <div class="btn-group">
                 <select name="country" id="country" class="select-field">
                     <option value="" selected disabled hidden>Filtrar por pais</option>

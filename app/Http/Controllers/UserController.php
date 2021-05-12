@@ -34,6 +34,7 @@ class UserController extends Controller
             'skills' => Skill::orderBy('name')->get(),
             'teams' => Team::orderBy('name')->get(),
             'countries' => Country::orderBy('name')->get(),
+            'professions' => Profession::orderBy('title')->get(),
             'checkedSkills' => collect(request('skills')), //Pasa la coleccion de valores validos
             'sortable' => $sortable, //Pasa el obj sortable
         ]);

@@ -238,6 +238,31 @@ class FilterUsersTest extends TestCase
             ->notContains($user2);
     }
 
+    /** @test */
+    function filters_users_by_profession()
+    {
+        $profession1 = Profession::factory()->create(['title' => 'Camarero']);
+        $profession2 = Profession::factory()->create(['title' => 'Fontanero']);
+
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create();
+
+        $user1->profile->update([
+            'profession_id' => $profession1->id
+        ]);
+
+        $user2->profile->update([
+            'profession_id' => $profession2->id
+        ]);
+
+        $response = $this->get('usuarios?profession=Fontanero');
+        $response->assertOk();
+        $response->assertViewCollection('users')
+            ->contains($user2)
+            ->notContains($user1);
+
+    }
+
 
     /** @test */
     function filter_users_by_search_and_team()

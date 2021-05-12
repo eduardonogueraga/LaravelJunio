@@ -25,6 +25,7 @@ class UserFilter extends QueryFilter
     public function rules(): array
     {
         return [
+            'profession' => 'exists:professions,title',
             'country' => 'exists:countries,name',
             'twitter' => 'in:with,without',
             'teamName' => 'exists:teams,name',
@@ -37,6 +38,13 @@ class UserFilter extends QueryFilter
             'to' => 'date_format:d/m/Y',
             'order' => [new SortableColumn(['first_name', 'last_name','email', 'date', 'login', 'twitter'])],  //Crea una instancia de sortcolum y le pasa los campos validos
         ];
+    }
+
+    public function profession($query, $profession)
+    {
+        return $query->whereHas('profile.profession', function ($query) use ($profession){
+            return $query->where('title', $profession);
+        });
     }
 
     public function country($query, $country)
