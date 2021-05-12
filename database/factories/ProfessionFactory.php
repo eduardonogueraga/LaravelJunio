@@ -22,7 +22,7 @@ class ProfessionFactory extends Factory
     public function definition()
     {
         return [
-            'title' => $this->faker->sentence(3),
+            'title' => $this->faker->unique()->jobTitle,
         ];
     }
 }

@@ -6,6 +6,9 @@
     <div class="d-flex justify-content-between align-items-end mb-3">
         <h1 class="pb-1">Listado de profesiones</h1>
     </div>
+    <p class="text-right">
+        <a href="{{ route('profession.create') }}" class="btn btn-primary">Nueva profesion</a>
+    </p>
     <table class="table">
         <thead class="thead-dark">
         <tr>
@@ -22,6 +25,7 @@
                 <td>{{ $profession->title }}</td>
                 <td>{{ $profession->profiles_count }}</td>
                 <td>
+                    <a href="{{route('profession.edit', $profession)}}"><span class="oi oi-pencil"></span></a>
                     @if($profession->profiles_count == 0)
                     <form action="{{ route('professions.destroy', $profession->id) }}" method="post">
                         @csrf
