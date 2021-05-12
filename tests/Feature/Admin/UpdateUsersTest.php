@@ -4,6 +4,7 @@ namespace Tests\Feature\Admin;
 
 use App\Profession;
 use App\Skill;
+use App\Team;
 use App\User;
 use App\UserProfile;
 use Tests\TestCase;
@@ -26,6 +27,7 @@ class UpdateUsersTest extends TestCase
         'street' => 'Calle de los carmelitas',
         'country' => 'Spain',
         'zipcode' => '30300',
+        'team_id' => '',
         'bio' => 'Programador de Laravel y Vue.js',
         'twitter' => 'https://twitter.com/pepe',
         'role' => 'user',
@@ -59,6 +61,12 @@ class UpdateUsersTest extends TestCase
         $user = User::factory()->create();
 
         $oldProfession = Profession::factory()->create();
+        $oldTeam = Team::factory()->create();
+
+        $user->update([
+            'team_id' => $oldTeam->id,
+        ]);
+
         $user->profile()->update([
             'profession_id' => $oldProfession->id,
         ]);
@@ -67,10 +75,12 @@ class UpdateUsersTest extends TestCase
         $user->skills()->attach([$oldSkill1->id, $oldSkill2->id]);
 
         $newProfession = Profession::factory()->create();
+        $newTeam = Team::factory()->create();
         $newSkill1 = Skill::factory()->create();
         $newSkill2 = Skill::factory()->create();
 
         $this->put('/usuarios/'.$user->id, $this->withData([
+            'team_id' => $newTeam->id,
             'role' => 'admin',
             'profession_id' => $newProfession->id,
             'skills' => [$newSkill1->id, $newSkill2->id],
@@ -80,6 +90,7 @@ class UpdateUsersTest extends TestCase
         $this->assertCredentials([
             'first_name' => 'Pepe',
             'last_name' => 'Pérez',
+            'team_id' => $newTeam->id,
             'email' => 'pepe@mail.es',
             'password' => '123456',
             'role' => 'admin',
@@ -489,6 +500,45 @@ class UpdateUsersTest extends TestCase
 
         $this->assertDatabaseHas('users', [
             'role' => 'admin',
+        ]);
+    }
+
+    /** @test */
+    function the_team_is_optional()
+    {
+        $this->withProfession();
+
+        $team = Team::factory()->create();
+        $user = User::factory()->create([
+            'team_id' => $team->id
+        ]);
+
+        $this->put('/usuarios/'.$user->id, $this->withData([
+            'team_id' => null,
+        ]))->assertRedirect('/usuarios/'.$user->id);
+
+        $this->assertDatabaseHas('users',[
+            'team_id' => null,
+        ]);
+    }
+
+    /** @test */
+    function the_team_field_must_be_valid()
+    {
+        $this->withProfession();
+        $this->handleValidationExceptions();
+        $team = Team::factory()->create();
+        $user = User::factory()->create([
+            'team_id' => $team->id,
+        ]);
+
+        $this->put('/usuarios/'.$user->id, $this->withData([
+            'team_id' => $team->id+999,
+        ]))->assertSessionHasErrors(['team_id']);
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'team_id' => $team->id,
         ]);
     }
 

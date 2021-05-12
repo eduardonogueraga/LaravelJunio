@@ -102,6 +102,7 @@ class UserController extends Controller
             'professions' => Profession::orderBy('title', 'ASC')->get(),
             'skills' => Skill::orderBy('name', 'ASC')->get(),
             'countries' => Country::orderBy('name', 'ASC')->get(),
+            'teams' => Team::orderBy('name', 'ASC')->get(),
             'user' => $user,
         ]);
     }

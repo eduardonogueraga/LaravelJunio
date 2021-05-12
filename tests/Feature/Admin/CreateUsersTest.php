@@ -5,6 +5,7 @@ namespace Tests\Feature\Admin;
 use App\Country;
 use App\Profession;
 use App\Skill;
+use App\Team;
 use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -24,6 +25,7 @@ class CreateUsersTest extends TestCase
         'city' => 'Alhama',
         'street' => 'Calle de los carmelitas',
         'country_id' => '',
+        'team_id' => '',
         'zipcode' => '30300',
         'bio' => 'Programador de Laravel y Vue.js',
         'twitter' => 'https://twitter.com/pepe',
@@ -55,6 +57,7 @@ class CreateUsersTest extends TestCase
         $this->withoutExceptionHandling();
 
         $profession = Profession::factory()->create();
+        $team = Team::factory()->create();
 
         $skillA = Skill::factory()->create();
         $skillB = Skill::factory()->create();
@@ -63,11 +66,13 @@ class CreateUsersTest extends TestCase
         $this->post('/usuarios/', $this->withData([
             'skills' => [$skillA->id, $skillB->id],
             'profession_id' => $profession->id,
+            'team_id' => $team->id,
         ]))->assertRedirect('/usuarios');
 
         $this->assertCredentials([
             'first_name' => 'Pepe',
             'last_name' => 'Pérez',
+            'team_id' => $team->id,
             'email' => 'pepe@mail.es',
             'password' => '123456',
             'role' => 'user',
@@ -395,6 +400,36 @@ class CreateUsersTest extends TestCase
         $this->post('/usuarios/', $this->withData([
             'state' => ''
         ]))->assertSessionHasErrors('state');
+
+        $this->assertDatabaseEmpty('users');
+    }
+
+    /** @test */
+    function the_team_is_optional()
+    {
+        $profession = Profession::factory()->create();
+
+        $this->post('/usuarios/', $this->withData([
+            'team_id' => null,
+            'profession_id' => $profession->id
+        ]))->assertRedirect('usuarios');
+
+        $this->assertCredentials([
+            'team_id' => null,
+            'email' => 'pepe@mail.es',
+            'password' => '123456',
+        ]);
+    }
+
+    /** @test */
+    function the_team_field_must_be_valid()
+    {
+        $this->handleValidationExceptions();
+        $team = Team::factory()->create();
+
+        $this->post('/usuarios/', $this->withData([
+            'team_id' => $team->id+2,
+        ]))->assertSessionHasErrors(['team_id']);
 
         $this->assertDatabaseEmpty('users');
     }

@@ -60,6 +60,16 @@
 </div>
 
 <div class="form-group">
+    <label for="team_id">Equipo(Opcional): </label>
+    <select name="team_id" id="team_id" class="form-control">
+        <option value="">Selecciona una opción</option>
+        @foreach($teams as $team)
+            <option value="{{ $team->id }}" {{(old('team_id', $user->team_id) == $team->id ) ? ' selected' : '' }}>{{ $team->name }}</option>
+        @endforeach
+    </select>
+</div>
+
+<div class="form-group">
     <label for="bio">Biografía:</label>
     <textarea name="bio" placeholder="Biografía" class="form-control">{{ old('bio', $user->profile->bio) }}</textarea>
 </div>

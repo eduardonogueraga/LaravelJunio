@@ -44,6 +44,10 @@ class UpdateUserRequest extends FormRequest
                 Rule::exists('countries', 'id')->whereNull('deleted_at'),
             ],
             'zipcode' => 'required',
+            'team_id' => [
+                'nullable',
+                Rule::exists('teams', 'id'),
+            ],
             'bio' => 'required',
             'twitter' => ['nullable', 'present', 'url'],
             'role' => [
@@ -74,6 +78,7 @@ class UpdateUserRequest extends FormRequest
         $user->fill([
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
+            'team_id' => $this->team_id,
             'email' => $this->email,
             'role' => $this->role,
             'state' => $this->state,
