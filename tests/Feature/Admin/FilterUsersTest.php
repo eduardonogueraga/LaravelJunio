@@ -15,6 +15,40 @@ class FilterUsersTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
+    function it_loads_the_users_list_page_with_filters()
+    {
+        $team1 = Team::factory()->create(['name' => 'Desatascos Teruel']);
+        $team2 = Team::factory()->create(['name' => 'Casa Paco']);
+
+        $profession1 = Profession::factory()->create(['title' => 'Avispado']);
+        $profession2 = Profession::factory()->create(['title' => 'Zopenco']);
+
+        $country1 = Country::factory()->create(['name' => 'Zimbabue']);
+        $country2 = Country::factory()->create(['name' => 'Australia']);
+
+        $response = $this->get('usuarios')
+            ->assertStatus(200)
+            ->assertSee('Listado de usuarios');
+
+        $response->assertSeeInOrder([$team2->name, $team1->name]);
+        $response->assertSeeInOrder([$profession1->title, $profession2->title]);
+        $response->assertSeeInOrder([$country2->name,$country1->name]);
+
+        $response->assertViewHas('teams', function ($teams) use ($team1, $team2){
+            return $teams->contains($team1) && $teams->contains($team2);
+        });
+
+        $response->assertViewHas('professions', function ($professions) use ($profession1, $profession2){
+            return $professions->contains($profession1) && $professions->contains($profession2);
+        });
+
+        $response->assertViewHas('countries', function ($countries) use ($country1, $country2){
+           return $countries->contains($country1) && $countries->contains($country2);
+        });
+
+    }
+
+    /** @test */
     function filter_users_by_state_active()
     {
         $activeUser = User::factory()->create();
