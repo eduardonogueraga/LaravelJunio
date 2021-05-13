@@ -281,6 +281,25 @@ class FilterUsersTest extends TestCase
 
     }
 
+    /** @test */
+    function filter_users_by_country_and_from()
+    {
+        $albania = Country::factory()->create(['name' => 'Albania']);
+
+        $user1 = User::factory()->create(['created_at' => '2020-03-15 00:00:00',]);
+        $user1->address()->update(['country_id' => $albania->id,]);
+
+        $user2 = User::factory()->create(['created_at' => '2015-05-12 00:00:00',]);
+        $user2->address()->update(['country_id' => $albania->id,]);
+
+        $response = $this->get('usuarios?from=01/01/2017&country=Albania');
+        $response->assertOk();
+        $response->assertViewCollection('users')
+            ->contains($user1)
+            ->notContains($user2);
+
+    }
+
 
     /** @test */
     function filter_users_by_search_and_team()
@@ -381,7 +400,6 @@ class FilterUsersTest extends TestCase
     /** @test */
     function filter_users_by_search_and_team_from()
     {
-        self::markTestIncomplete();
         $team1 = Team::factory()->create();
 
         $oldWithTeam = User::factory()->create([
@@ -409,7 +427,7 @@ class FilterUsersTest extends TestCase
         $otherWithTeam = User::factory()->create([
             'first_name' => 'Kike',
             'team_id' => $team1->id,
-            'created_at' => '2020-12-24 13:59:59',
+            'created_at' => '2020-10-24 13:59:59',
         ]);
 
         $response = $this->get('/usuarios?team=with_team&search=Armando&from=24%2F10%2F2020&to=');
@@ -422,4 +440,51 @@ class FilterUsersTest extends TestCase
             ->notContains($oldWithoutTeam);
     }
 
+    /** @test */
+    function filter_users_by_search_and_country_and_role_and_from()
+    {
+
+        $country1 = Country::factory()->create(['name' => 'Albania']);
+        $country2 = Country::factory()->create(['name' => 'Rumania']);
+        $country3 = Country::factory()->create(['name' => 'Italia']);
+
+        $user1 = User::factory()->create([
+            'first_name' => 'Wanillo',
+            'role' => 'admin',
+            'created_at' => '2020-12-24 13:59:59',
+        ]);
+
+        $user1->address()->update(['country_id' => $country1->id,]);
+
+        $user2 = User::factory()->create([
+            'first_name' => 'Kike',
+            'role' => 'admin',
+            'created_at' => '2020-12-24 13:59:59',
+        ]);
+
+        $user2->address()->update(['country_id' => $country2->id]);
+
+        $user3 = User::factory()->create([
+            'first_name' => 'Kike',
+            'role' => 'user',
+            'created_at' => '2021-03-22 13:59:59',
+        ]);
+
+        $user3->address()->update(['country_id' => $country3->id]);
+
+        $user4 = User::factory()->create([
+            'first_name' => 'Kike',
+            'role' => 'admin',
+            'created_at' => '2002-03-22 13:59:59',
+        ]);
+        $user4->address()->update(['country_id' => $country2->id]);
+
+        $response = $this->get('usuarios?search=Kike&role=admin&from=10/11/2020&country=Rumania');
+        $response->assertOk();
+        $response->assertViewCollection('users')
+            ->contains($user2)
+            ->notContains($user3)
+            ->notContains($user4)
+            ->notContains($user1);
+    }
 }

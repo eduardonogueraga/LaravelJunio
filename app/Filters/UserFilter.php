@@ -41,13 +41,10 @@ class UserFilter extends QueryFilter
         ];
     }
 
-    public function occupation($query, $occupation, $operator = '=')
+    public function occupation($query, $occupation, $method = 'has')
     {
-        if($occupation == 'employed'){$operator = '!=';}
-
-        return $query->whereHas('profile', function ($query) use ($operator){
-            return $query->where('profession_id', $operator, null);
-        });
+        $occupation == 'employed'?:$method = 'doesntHave';  //has y doesntHave parametrizado ni te rayes
+        return $query->$method('profile.profession');
     }
 
     public function profession($query, $profession)
@@ -91,11 +88,13 @@ class UserFilter extends QueryFilter
 
     public function search($query, $search)
     {
-        return $query->whereRaw('CONCAT(first_name, " ", last_name) like ?', "%$search%")
-            ->orWhere('email', 'like', "%$search%")
-            ->orWhereHas('team', $this->subQuery($search, 'name'))
-            ->orWhereHas('profile', $this->subQuery($search, 'twitter'))
-            ->orWhereHas('profile.profession', $this->subQuery($search, 'title'));
+        return $query->where(function ($query) use ($search){ //Para que el where ponga el parentesis
+            return $query->whereRaw('CONCAT(first_name, " ", last_name) like ?', "%$search%")
+                ->orWhere('email', 'like', "%$search%")
+                ->orWhereHas('team', $this->subQuery($search, 'name'))
+                ->orWhereHas('profile', $this->subQuery($search, 'twitter'))
+                ->orWhereHas('profile.profession', $this->subQuery($search, 'title'));
+        });
     }
 
     public function state($query, $state)
