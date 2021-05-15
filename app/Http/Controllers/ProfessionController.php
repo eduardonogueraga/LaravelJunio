@@ -50,7 +50,7 @@ class ProfessionController extends Controller
     public function update(UpdateProfessionRequest $request, Profession $profession)
     {
         $request->updateProfession($profession);
-        return redirect()->route('professions.index');
+        return redirect()->route('profession.show', ['profession' => $profession]);
     }
 
 

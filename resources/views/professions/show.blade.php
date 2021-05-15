@@ -16,7 +16,7 @@
 
 
     <p>
-        <a href="{{ url()->previous() }}">Regresar al listado de profesiones</a>
+        <a href="{{  route('users.index') }}">Regresar al listado de profesiones</a>
     </p>
 @endsection
 

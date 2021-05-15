@@ -23,7 +23,7 @@
 <h2>Biografia</h2>
 <p>{{$user->profile->bio}}</p>
 <p>
-    <a href="{{ url()->previous() }}">Regresar al listado de usuarios</a>
+    <a href="{{ route('users.index') }}">Regresar al listado de usuarios</a>
 </p>
 @endsection
 

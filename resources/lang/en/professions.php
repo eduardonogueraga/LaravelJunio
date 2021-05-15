@@ -1,5 +1,9 @@
 <?php
 return [
+    'form' => [
+        'language' => ['Sin idiomas', 'Con idiomas'],
+        'transport' => ['Sin transporte', 'Con transporte'],
+    ],
     'filters' => [
         'transport' => ['all' => 'Todos', 'with' => 'Con vehiculo', 'without'=> 'Sin vehiculo'],
         'language' => ['all' => 'Todos', 'with' => 'Con idiomas', 'without' => 'Sin idiomas'],
@@ -10,5 +14,5 @@ return [
     ],
     'academic_level' => [
         'Estudios universitarios', 'Educación secundaria', 'Estudios de postgrado', 'Enseñanza básica'
-    ]
+    ],
 ];

@@ -27,7 +27,7 @@ class UpdateProfessionTest extends TestCase
 
         $this->from("profesiones/{$profession->id}/editar")
             ->put("profesiones/{$profession->id}", $this->withData())
-            ->assertRedirect('profesiones');
+            ->assertRedirect("profesiones/{$profession->id}/show");
 
         $this->assertDatabaseHas('professions', [
             'title' => 'Desarrollador web',
