@@ -3,7 +3,7 @@
     <th scope="row">{{ $profession->title }}</th>
     <td>{{ $profession->workday }}</td>
     <td>{{ $profession->academic_level }}</td>
-    <td>{{ $profession->salary }}€</td>
+    <td>{{ number_format($profession->salary, 0, ',', '.') }}€</td>
     <td>{{ $profession->profiles_count }}</td>
     <td class="text-right">
         <a href="{{ route('profession.show', $profession) }}" class="btn btn-outline-secondary btn-sm"><span class="oi oi-eye"></span></a>
@@ -18,7 +18,7 @@
     </td>
 </tr>
 <tr class="skills">
-    <td colspan="1"><span class="note">Años de experiencia: {{ $profession->experience }}</span></td>
+    <td colspan="1"><span class="note">Años de experiencia: {{ ($profession->experience)?? 'Sin experiencia' }}</span></td>
     <td colspan="1"><span class="note">Idiomas:{{ ($profession->language)? 'Si': 'No'}}</span></td>
     <td colspan="1"><span class="note">Trasnporte:{{ ($profession->vehicle)? 'Disponer de vehiculo propio': 'No'}}</span></td>
 </tr>

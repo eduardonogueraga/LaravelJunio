@@ -10,7 +10,7 @@
         <a href="{{ route('profession.create') }}" class="btn btn-primary">Nueva profesion</a>
     </p>
 
-    {{--    @includeWhen($view == 'index', 'profession._filters')--}}
+    @include('professions._filters')
 
     @if ($professions->isNotEmpty())
 

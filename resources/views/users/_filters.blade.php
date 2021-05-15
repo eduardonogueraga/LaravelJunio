@@ -85,7 +85,7 @@
                 <div class="input-group">
                     <input type="text" class="form-control form-control-sm" name="to" id="to" placeholder="Hasta" value="{{ request('to') }}">
                 </div>
-                &nbsp;
+
                 <button type="submit" class="btn btn-sm btn-primary">Filtrar</button>
             </div>
         </div>

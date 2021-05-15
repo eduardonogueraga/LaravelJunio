@@ -11,6 +11,12 @@ class Profession extends Model
 
     protected $guarded = [];
 
+
+    public function newEloquentBuilder($query)
+    {
+        return new ProfessionQuery($query);
+    }
+
     public function users()
     {
         return $this->hasMany(User::class);

@@ -13,6 +13,7 @@ class ProfessionController extends Controller
     {
         $profession = Profession::query()
             ->withCount('profiles')
+            ->applyFilters()
             ->orderBy('title')
             ->paginate();
 

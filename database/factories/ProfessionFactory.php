@@ -30,7 +30,7 @@ class ProfessionFactory extends Factory
             'language' => $this->faker->boolean,
             'vehicle' => $this->faker->boolean,
             'academic_level' => Arr::random($this->getAcademicLevel()),
-            'experience' => $this->faker->numberBetween(0,6),
+            'experience' => rand(0,1)?$this->faker->numberBetween(1,6): null,
         ];
     }
 

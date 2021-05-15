@@ -22,7 +22,7 @@ class CreateProfessionsTable extends Migration
             $table->boolean('language');
             $table->boolean('vehicle');
             $table->string('academic_level');
-            $table->integer('experience');
+            $table->integer('experience')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
