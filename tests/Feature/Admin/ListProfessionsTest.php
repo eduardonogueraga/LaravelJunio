@@ -13,6 +13,7 @@ class ListProfessionsTest extends TestCase
     /** @test */
     function it_shows_the_professions_list()
     {
+        self::markTestIncomplete();
         Profession::factory()->create(['title' => 'Diseñador']);
         Profession::factory()->create(['title' => 'Programador']);
         Profession::factory()->create(['title' => 'Administrador']);

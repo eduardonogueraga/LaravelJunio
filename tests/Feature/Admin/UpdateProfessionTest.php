@@ -12,6 +12,12 @@ class UpdateProfessionTest extends TestCase
 
     protected $defaultData = [
         'title' => 'Desarrollador web',
+        'salary' => '15000',
+        'workday' => 'Jornada completa',
+        'language' => 0,
+        'vehicle' => 0,
+        'academic_level' => 'Educación secundaria',
+        'experience' => '3',
     ];
 
     /** @test  */

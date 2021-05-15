@@ -11,6 +11,12 @@ class CreateProfessionTest extends TestCase
 
     protected $defaultData = [
         'title' => 'Desarrollador web',
+        'salary' => '15000',
+        'workday' => 'Jornada completa',
+        'language' => 0,
+        'vehicle' => 0,
+        'academic_level' => 'Educación secundaria',
+        'experience' => '3',
     ];
 
     /** @test */
@@ -18,7 +24,7 @@ class CreateProfessionTest extends TestCase
     {
      $this->from('profesiones/create')
          ->post('profesiones/', $this->withData([
-             'title' => 'Mecánico'
+             'title' => 'Mecánico',
          ]))->assertRedirect('profesiones');
 
      $this->assertDatabaseCount('professions', 1);

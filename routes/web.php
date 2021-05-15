@@ -37,7 +37,7 @@ Route::get('/profesiones/create', 'ProfessionController@create')->name('professi
 Route::post('/profesiones/', 'ProfessionController@store')->name('profession.store');
 Route::get('/profesiones/{profession}/editar', 'ProfessionController@edit')->name('profession.edit');
 Route::put('/profesiones/{profession}', 'ProfessionController@update')->name('profession.update');
-
+Route::get('/profesiones/{profession}/show', 'ProfessionController@show')->name('profession.show');
 Route::delete('/profesiones/{profession}', 'ProfessionController@destroy')->name('professions.destroy');
 
 

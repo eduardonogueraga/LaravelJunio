@@ -13,6 +13,12 @@ trait UserRequestRules
         if (isset($this->other_profession)) {
             $otherProfession = Profession::create([
                 'title' => $this->other_profession,
+                'salary' => '10000',
+                'workday' => 'Jornada completa',
+                'language' => 0,
+                'vehicle' => 0,
+                'academic_level' => 'Educación secundaria',
+                'experience' => '0',
             ]);
             return $otherProfession->id;
         }

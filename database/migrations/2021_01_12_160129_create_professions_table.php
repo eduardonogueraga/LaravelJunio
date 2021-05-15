@@ -17,6 +17,12 @@ class CreateProfessionsTable extends Migration
             $table->bigIncrements('id');
 
             $table->string('title', 100)->unique();
+            $table->float('salary');
+            $table->string('workday');
+            $table->boolean('language');
+            $table->boolean('vehicle');
+            $table->string('academic_level');
+            $table->integer('experience');
 
             $table->timestamps();
             $table->softDeletes();
