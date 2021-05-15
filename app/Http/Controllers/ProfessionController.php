@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateProfessionRequest;
 use App\Http\Requests\UpdateProfessionRequest;
 use App\Profession;
+use App\Sortable;
 use Illuminate\Http\Request;
 
 class ProfessionController extends Controller
 {
-    public function index()
+    public function index(Sortable $sortable)
     {
         $profession = Profession::query()
             ->withCount('profiles')
@@ -17,8 +18,11 @@ class ProfessionController extends Controller
             ->orderBy('title')
             ->paginate();
 
+        $sortable->appends($profession->parameters());
+
         return view('professions.index', [
             'professions' => $profession,
+            'sortable' => $sortable,
         ]);
     }
 

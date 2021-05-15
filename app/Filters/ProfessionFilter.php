@@ -2,9 +2,24 @@
 
 namespace App\Filters;
 use App\Rules\SortableColumn;
+use App\Sortable;
 
 class ProfessionFilter extends QueryFilter
 {
+    protected $aliasses = [
+        'jornada' => 'workday',
+        'salario' => 'salary',
+        'titulo' => 'title',
+        'nivel' => 'academic_level',
+        'perfiles' => 'profiles_count',
+    ];
+
+    public function getColumnName($alias)
+    {
+        return $this->aliasses[$alias] ?? $alias;
+    }
+
+
     public function rules(): array
     {
         return [
@@ -14,6 +29,7 @@ class ProfessionFilter extends QueryFilter
             'language' => 'in:with,without',
             'transport' => 'in:with,without',
             'experience' => 'in:with,without',
+            'order' => [new SortableColumn(['titulo', 'jornada','nivel', 'salario', 'perfiles'])], //Profile count es el alias el count (usa alias para lo que viene de la vista)
         ];
     }
 
@@ -53,6 +69,12 @@ class ProfessionFilter extends QueryFilter
     public function academic_level($query, $academic_level)
     {
         return $query->where('academic_level', $academic_level);
+    }
+
+    public function order($query, $value)
+    {
+        [$column, $direction] = Sortable::info($value);
+        $query->orderBy($this->getColumnName($column), $direction);
     }
 
 }

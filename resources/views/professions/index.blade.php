@@ -19,11 +19,11 @@
                 <thead class="thead-dark">
                 <tr>
                     <th scope="col"># <span class="oi oi-caret-bottom"></span><span class="oi oi-caret-top"></span></th>
-                    <th scope="col">Título</th>
-                    <th scope="col">Jornada</th>
-                    <th scope="col">Nivel academico</th>
-                    <th scope="col">Salario anual</th>
-                    <th scope="col">Perfiles</th>
+                    <th scope="col"><a href="{{ $sortable->url('titulo') }}" class="{{ $sortable->classes('titulo') }}">Titulo</a></th>
+                    <th scope="col"><a href="{{ $sortable->url('jornada') }}" class="{{ $sortable->classes('jornada') }}">Jornada</a></th>
+                    <th scope="col"><a href="{{ $sortable->url('nivel') }}" class="{{ $sortable->classes('nivel') }}">Nivel academico</a></th>
+                    <th scope="col"><a href="{{ $sortable->url('salario') }}" class="{{ $sortable->classes('salario') }}">Salario anual</a></th>
+                    <th scope="col"><a href="{{ $sortable->url('perfiles') }}" class="{{ $sortable->classes('perfiles') }}">Perfiles</a></th>
                     <th scope="col" class="text-right th-actions">Acciones</th>
                 </tr>
                 </thead>
