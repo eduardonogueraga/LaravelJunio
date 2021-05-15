@@ -17,12 +17,12 @@ class UpdateProfessionRequest extends FormRequest
     {
         return [
             'title' => ['required', 'regex:/^[a-zA-ZáéíóúñÑ\s]+$/'],
-            'salary' => 'required',
-            'workday' => 'required',
-            'language' => 'required',
-            'vehicle' => 'required',
-            'academic_level' => 'required',
-            'experience' => 'required',
+            'salary' => ['required', 'numeric'],
+            'workday' => 'required|in:' . implode(',', trans('professions.workday')),
+            'language' => 'required|in:0,1',
+            'vehicle' => 'required|in:0,1',
+            'academic_level' => 'required|in:' . implode(',', trans('professions.academic_level')),
+            'experience' => 'nullable',
         ];
     }
 
