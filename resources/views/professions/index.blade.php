@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-end mb-3">
-        <h1 class="pb-1">Listado de profesiones</h1>
+        <h1 class="pb-1">{{trans('professions.title.index')}}</h1>
     </div>
     <p class="text-right">
         <a href="{{ route('profession.create') }}" class="btn btn-primary">Nueva profesion</a>

@@ -1,5 +1,9 @@
 <?php
 return [
+    'title' => [
+        'index' => 'Listado de profesiones'
+    ],
+
     'form' => [
         'language' => ['Sin idiomas', 'Con idiomas'],
         'transport' => ['Sin transporte', 'Con transporte'],

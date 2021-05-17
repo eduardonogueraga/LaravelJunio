@@ -21,7 +21,7 @@ class CreateProfessionRequest extends FormRequest
             'language' => 'required|in:0,1',
             'vehicle' => 'required|in:0,1',
             'academic_level' => 'required|in:' . implode(',', trans('professions.academic_level')),
-            'experience' => 'nullable',
+            'experience' => 'nullable|not_in:0',
         ];
     }
 
