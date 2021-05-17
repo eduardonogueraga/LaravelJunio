@@ -34,6 +34,24 @@ class ProfessionFactory extends Factory
         ];
     }
 
+    public function withLanguage()
+    {
+        return $this->state(function ($faker) {
+            return [
+                'language' => '1'
+            ];
+        });
+    }
+
+    public function withVehicle()
+    {
+        return $this->state(function ($faker) {
+            return [
+                'vehicle' => '1'
+            ];
+        });
+    }
+
 
     public function getWorkday()
     {
