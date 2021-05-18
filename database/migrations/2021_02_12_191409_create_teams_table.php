@@ -18,6 +18,7 @@ class CreateTeamsTable extends Migration
 
             $table->string('name')->unique();
 
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -2,11 +2,14 @@
 
 namespace Database\Seeders;
 
+use App\Profession;
 use App\Team;
 use Illuminate\Database\Seeder;
 
 class TeamSeeder extends Seeder
 {
+    protected $professions;
+
     /**
      * Run the database seeders.
      *
@@ -14,8 +17,21 @@ class TeamSeeder extends Seeder
      */
     public function run()
     {
+        $this->fetchRelations();
+
         Team::factory()->create(['name' => 'IES Ingeniero']);
 
-        Team::factory()->times(99)->create();
+        foreach (range(1, 99) as $i) {$this->createRandomTeam();}
+        //Team::factory()->times(99)->create();
+    }
+
+    public function fetchRelations()
+    {
+        $this->professions = Profession::all();
+    }
+
+    public function createRandomTeam(){
+        $team = Team::factory()->create();
+        $team->professions()->attach($this->professions->random(rand(0, 6)));
     }
 }

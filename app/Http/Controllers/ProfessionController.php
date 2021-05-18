@@ -13,6 +13,7 @@ class ProfessionController extends Controller
     public function index(Sortable $sortable)
     {
         $profession = Profession::query()
+            ->with('teams') //Para la relacion con teams N:M
             ->withCount('profiles')
             ->applyFilters()
             ->orderBy('title')

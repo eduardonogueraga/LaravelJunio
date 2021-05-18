@@ -4,8 +4,16 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Team extends Model
 {
-    use HasFactory;
+    use HasFactory,SoftDeletes;
+
+    protected $guarded = [];
+
+    function professions()
+    {
+        return $this->belongsToMany(Profession::class);
+    }
 }

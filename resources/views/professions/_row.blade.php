@@ -22,3 +22,9 @@
     <td colspan="1"><span class="note">Idiomas:{{ ($profession->language)? 'Si': 'No'}}</span></td>
     <td colspan="1"><span class="note">Trasnporte:{{ ($profession->vehicle)? 'Disponer de vehiculo propio': 'No'}}</span></td>
 </tr>
+<tr class="skills">
+    <td colspan="3"><span class="note">Empresas que ofertan esta profesión: <b>{{
+    ($profession->teams->count() >2)? ($profession->teams->slice(0,2)->implode('name') .' y ' . ($profession->teams->count()-2) .' más.') :
+    ($profession->teams->implode('name'))?: 'Ninguna'
+     }}</b></span></td>
+</tr>
