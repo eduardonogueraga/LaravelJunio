@@ -9,7 +9,7 @@
 <p>Apellidos del usuario: {{$user->last}}</p>
 <p>Correo electrónico: {{ $user->email }}</p>
 <p>Twitter: {{ ($user->profile->twitter)?: 'Sin cuenta de twitter' }}</p>
-<p>Profession: {{($user->profile->profession->title)?: 'Sin profesion'}}</p>
+<p>Profession: {{optional($user->profile->profession)->title?: 'Sin profesion'}}</p>
 <p>Equipo: {{($user->team->name)?: 'Sin equipo'}}</p>
 <p>Hablidades: {{($user->skills->implode('name', ','))?: 'Sin habilidades'}}</p>
 
@@ -23,7 +23,12 @@
 <h2>Biografia</h2>
 <p>{{$user->profile->bio}}</p>
 <p>
-    <a href="{{ route('users.index') }}">Regresar al listado de usuarios</a>
+
+    @if(url()->previous() == route('users.edit',  ['user' =>  intval($user->id)]))
+        <a href="{{ route('users.index') }}">Regresar al listado de usuarios</a>
+    @else
+        <a href="{{ url()->previous() }}">Regresar</a>
+    @endif
 </p>
 @endsection
 

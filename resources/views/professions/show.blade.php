@@ -13,10 +13,14 @@
     <p>Requiere idiomas: {{($profession->language)?'Si': 'No'}}</p>
     <p>Requiere vehiculo: {{($profession->vehicle)?'Si': 'No'}}</p>
     <p>Usuarios con esta profesion: {{count($profession->profiles)}}</p>
-
+    <p>Empresas que solicitan esta profession: <b>{{($profession->teams->implode('name'))}}</b></p>
 
     <p>
-        <a href="{{  route('users.index') }}">Regresar al listado de profesiones</a>
+        @if(url()->previous() == route('profession.edit',  ['profession' =>  intval($profession->id)]))
+            <a href="{{  route('professions.index') }}">Regresar al listado de profesiones</a>
+        @else
+        <a href="{{ url()->previous() }}">Regresar</a>
+        @endif
     </p>
 @endsection
 

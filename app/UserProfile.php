@@ -16,7 +16,7 @@ class UserProfile extends Model
     {
         return $this->belongsTo(Profession::class)
             ->withDefault([
-                'title' => '(Sin profesion)'
+                //'title' => '(Sin profesion)'
             ]);
     }
 }

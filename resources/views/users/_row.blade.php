@@ -38,6 +38,13 @@
     </td>
 </tr>
 <tr class="skills">
-    <td colspan="3"><span class="note">{{ $user->profile->profession->title }}</span></td>
+
+    <td colspan="3"><span class="note">
+            @if($user->profile->profession)
+                <a style="color: #2a2730" href="{{route('profession.show',  ['profession' =>  intval($user->profile->profession->id)])}}">{{ $user->profile->profession->title }}</a>
+            @else
+               (Sin profession)
+            @endif
+        </span></td>
     <td colspan="4"><span class="note">{{ $user->skills->implode('name', ', ') ?: 'Sin habilidades'}}</span></td>
 </tr>
