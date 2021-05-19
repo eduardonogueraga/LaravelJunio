@@ -40,6 +40,13 @@ Route::put('/profesiones/{profession}', 'ProfessionController@update')->name('pr
 Route::get('/profesiones/{profession}/show', 'ProfessionController@show')->name('profession.show');
 Route::delete('/profesiones/{profession}', 'ProfessionController@destroy')->name('professions.destroy');
 
+Route::get('/equipos/', 'TeamController@index')->name('teams.index');
+Route::get('/equipos/{team}/show', 'TeamController@show')->name('teams.show');
+
+Route::get('/equipos/crear', 'TeamController@create')->name('teams.create');
+Route::post('/equipos/', 'TeamController@store')->name('teams.store');
+Route::get('/equipos/{team}/editar', 'TeamController@edit')->name('teams.edit');
+Route::put('/equipos/{team}', 'TeamController@update')->name('teams.update');
 
 
 Route::get('/habilidades/', 'SkillController@index')->name('skills.index');
