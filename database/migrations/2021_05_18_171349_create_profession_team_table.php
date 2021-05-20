@@ -12,10 +12,10 @@ class CreateProfessionTeamTable extends Migration
             $table->bigIncrements('id');
 
             $table->unsignedBigInteger('profession_id');
-            $table->foreign('profession_id')->references('id')->on('professions');
+            $table->foreign('profession_id')->references('id')->on('professions')->onDelete('cascade');
 
             $table->unsignedBigInteger('team_id');
-            $table->foreign('team_id')->references('id')->on('teams');
+            $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
 
             $table->softDeletes();
             $table->timestamps();

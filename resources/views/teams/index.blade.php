@@ -5,10 +5,17 @@
 @section('content')
     <div class="d-flex justify-content-between align-items-end mb-3">
         <h1 class="pb-1">{{trans('teams.title.index')}}</h1>
+        <p>
+            @if ($view == 'index')
+                <a href="{{ route('teams.trashed') }}" class="btn btn-outline-dark">Ver papelera</a>
+                <a href="{{ route('teams.create') }}" class="btn btn-primary">Nuevo equipo</a>
+            @else
+                <a href="{{ route('teams.index') }}" class="btn btn-outline-dark">Regresar al listado de equipo</a>
+            @endif
+        </p>
     </div>
-    <p class="text-right">
-     -  <a href="{{ route('teams.create') }}" class="btn btn-primary">Nuevo equipo</a>
-    </p>
+
+
 
     {{--@include('teams._filters')--}}
 

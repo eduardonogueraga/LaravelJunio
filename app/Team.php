@@ -21,4 +21,9 @@ class Team extends Model
     {
         return $this->hasMany(User::class);
     }
+
+    public function newEloquentBuilder($query)
+    {
+        return new TeamQuery($query);
+    }
 }

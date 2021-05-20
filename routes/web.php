@@ -47,6 +47,11 @@ Route::get('/equipos/crear', 'TeamController@create')->name('teams.create');
 Route::post('/equipos/', 'TeamController@store')->name('teams.store');
 Route::get('/equipos/{team}/editar', 'TeamController@edit')->name('teams.edit');
 Route::put('/equipos/{team}', 'TeamController@update')->name('teams.update');
+Route::get('/equipos/papelera', 'TeamController@index')->name('teams.trashed'); //Para listar
+
+Route::get('/equipos/{team}/restore', 'TeamController@restore')->name('teams.restore');
+Route::patch('/equipos/{team}/papelera', 'TeamController@trash')->name('teams.trash'); //Para borrar
+Route::delete('/equipos/{team}', 'TeamController@destroy')->name('teams.destroy');
 
 
 Route::get('/habilidades/', 'SkillController@index')->name('skills.index');

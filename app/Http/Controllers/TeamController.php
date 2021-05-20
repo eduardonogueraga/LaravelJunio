@@ -8,6 +8,7 @@ use App\Profession;
 use App\Team;
 use Facade\Ignition\QueryRecorder\Query;
 use Illuminate\Http\Request;
+use SebastianBergmann\Template\Template;
 
 class TeamController extends Controller
 {
@@ -18,11 +19,13 @@ class TeamController extends Controller
         ->with('users','professions')
         ->withCount('users')
         ->withCount('professions')
+        ->onlyTrashedIf(request()->routeIs('teams.trashed')) //Controla en funcion de la ruta que lo llama
         ->orderBy('name')
         ->paginate();
 
         return view('teams.index', [
             'teams' => $teams,
+            'view' => request()->routeIs('teams.trashed') ? 'trash' : 'index',
         ]);
     }
 
@@ -55,14 +58,24 @@ class TeamController extends Controller
         return redirect()->route('teams.show', compact('team'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param $id
-     * @return \Illuminate\Http\Response
-     */
+    public function trash(Team $team)
+    {
+        $team->delete();
+        return redirect()->route('teams.trashed');
+    }
+
+    public function restore($id)
+    {
+        $team = Team::onlyTrashed()->where('id', $id)->firstOrFail();
+        $team->restore();
+        return redirect()->route('teams.index');
+    }
+
     public function destroy($id)
     {
-        //
+        $team = Team::onlyTrashed()->where('id', $id)->firstOrFail();
+        abort_if($team->users()->exists(), 400, 'Cannot delete a team linked to a user');
+        $team->forceDelete();
+        return redirect()->route('teams.trashed');
     }
 }
