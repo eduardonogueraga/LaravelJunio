@@ -104,10 +104,12 @@ class UserFilter extends QueryFilter
 
     public function skills($query, $skills)
     {
+        //Basicamente busca la persona que tenga todas las que salen por eso compara con el count del arr
+
         $subquery = DB::table('skill_user AS s')
             ->selectRaw('COUNT(s.id)')
             ->whereColumn('s.user_id', 'users.id')
-            ->whereIn('skill_id', $skills);
+            ->whereIn('skill_id', $skills); //Todos los users q tengan habilidad x en el arr de skikls
 
         $query->whereQuery($subquery, count($skills)); //Es la funcion del querybuilder para hacer subconsultas y bindear parms
     }

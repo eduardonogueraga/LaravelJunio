@@ -15,9 +15,7 @@
         </p>
     </div>
 
-
-
-    {{--@include('teams._filters')--}}
+    @includeWhen($view=='index','teams._filters')
 
     @if ($teams->isNotEmpty())
 

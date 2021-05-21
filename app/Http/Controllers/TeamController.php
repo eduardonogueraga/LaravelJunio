@@ -20,6 +20,7 @@ class TeamController extends Controller
         ->withCount('users')
         ->withCount('professions')
         ->onlyTrashedIf(request()->routeIs('teams.trashed')) //Controla en funcion de la ruta que lo llama
+        ->applyFilters()
         ->orderBy('name')
         ->paginate();
 
