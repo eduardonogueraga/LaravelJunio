@@ -2,10 +2,23 @@
 
 namespace App\Filters;
 
+use App\Rules\SortableColumn;
+use App\Sortable;
 use Illuminate\Support\Facades\DB;
 
 class TeamFilter extends QueryFilter
 {
+    protected $aliasses = [
+        'nombre_empresa' => 'name',
+        'trabajadores' => 'users_count',
+        'numero_profesiones' => 'professions_count',
+    ];
+
+    public function getColumnName($alias)
+    {
+        return $this->aliasses[$alias] ?? $alias;
+    }
+
     public function rules(): array
     {
         return [
@@ -13,7 +26,8 @@ class TeamFilter extends QueryFilter
             'worker' => 'in:with,without',
             'profession' => 'in:with,without',
             'headquarter' => 'exists:headquarters,name',
-            'professions' => 'array|exists:professions,id'
+            'professions' => 'array|exists:professions,id',
+            'order' => [new SortableColumn(['nombre_empresa','trabajadores','numero_profesiones'])],
         ];
     }
 
@@ -61,5 +75,11 @@ class TeamFilter extends QueryFilter
                     return $query->where('name', 'like',"%$search%" );
                 });
         });
+    }
+
+    public function order($query, $value)
+    {
+        [$column, $direction] = Sortable::info($value);
+        $query->orderBy($this->getColumnName($column), $direction);
     }
 }

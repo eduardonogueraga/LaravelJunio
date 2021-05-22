@@ -24,9 +24,9 @@
                 <thead class="thead-dark">
                 <tr>
                     <th scope="col"># <span class="oi oi-caret-bottom"></span><span class="oi oi-caret-top"></span></th>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Trabajadores</th>
-                    <th scope="col">Número de profesiones</th>
+                    <th scope="col"><a href="{{ $sortable->url('nombre_empresa') }}" class="{{ $sortable->classes('nombre_empresa') }}">Nombre</a></th>
+                    <th scope="col"><a href="{{ $sortable->url('trabajadores') }}" class="{{ $sortable->classes('trabajadores') }}">Trabajadores</a></th>
+                    <th scope="col"><a href="{{ $sortable->url('numero_profesiones') }}" class="{{ $sortable->classes('numero_profesiones') }}">Número de profesiones</a></th>
                     <th scope="col" class="text-right th-actions">Acciones</th>
                 </tr>
                 </thead>

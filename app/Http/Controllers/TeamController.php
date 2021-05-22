@@ -6,6 +6,7 @@ use App\Headquarter;
 use App\Http\Requests\CreateTeamRequest;
 use App\Http\Requests\UpdateTeamRequest;
 use App\Profession;
+use App\Sortable;
 use App\Team;
 use Facade\Ignition\QueryRecorder\Query;
 use Illuminate\Http\Request;
@@ -14,7 +15,7 @@ use SebastianBergmann\Template\Template;
 class TeamController extends Controller
 {
 
-    public function index()
+    public function index(Sortable $sortable)
     {
         $teams = Team::query()
         ->with('users','professions', 'headquarter')
@@ -25,6 +26,8 @@ class TeamController extends Controller
         ->orderBy('name')
         ->paginate();
 
+        $sortable->appends($teams->parameters());
+
         return view('teams.index', [
             'teams' => $teams,
             'view' => request()->routeIs('teams.trashed') ? 'trash' : 'index',
@@ -34,6 +37,7 @@ class TeamController extends Controller
                             ->whereHas('teams')
                             ->orderBy('title', 'ASC')->get(),
             'checkedProfessions' => collect(request('professions')), //La memoria que le viene del request
+            'sortable' => $sortable,
         ]);
     }
 
