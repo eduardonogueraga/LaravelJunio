@@ -16,7 +16,7 @@ class TeamController extends Controller
     public function index()
     {
         $teams = Team::query()
-        ->with('users','professions')
+        ->with('users','professions', 'headquarter')
         ->withCount('users')
         ->withCount('professions')
         ->onlyTrashedIf(request()->routeIs('teams.trashed')) //Controla en funcion de la ruta que lo llama

@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->truncateTables(['professions', 'user_profiles', 'skill_user',
-            'skills', 'users', 'teams', 'addresses', 'countries']);
+            'skills', 'users', 'teams', 'addresses', 'countries', 'headquarters']);
 
         $this->call(ProfessionSeeder::class);
         $this->call(SkillSeeder::class);

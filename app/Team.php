@@ -12,14 +12,19 @@ class Team extends Model
 
     protected $guarded = [];
 
-    function professions()
+    public function professions()
     {
         return $this->belongsToMany(Profession::class);
     }
 
-    function users()
+    public function users()
     {
         return $this->hasMany(User::class);
+    }
+
+    public function headquarter()
+    {
+        return $this->hasOne(Headquarter::class);
     }
 
     public function newEloquentBuilder($query)

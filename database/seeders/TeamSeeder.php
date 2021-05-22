@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Headquarter;
 use App\Profession;
 use App\Team;
+use App\User;
 use Illuminate\Database\Seeder;
 
 class TeamSeeder extends Seeder
