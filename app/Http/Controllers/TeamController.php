@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Headquarter;
 use App\Http\Requests\CreateTeamRequest;
 use App\Http\Requests\UpdateTeamRequest;
 use App\Profession;
@@ -27,6 +28,12 @@ class TeamController extends Controller
         return view('teams.index', [
             'teams' => $teams,
             'view' => request()->routeIs('teams.trashed') ? 'trash' : 'index',
+            'headquarters' => Headquarter::orderBy('name', 'ASC')->get(),
+            'professions' => Profession::query() //Solo quiero professiones que esten en algun equipo
+                            ->with('teams')
+                            ->whereHas('teams')
+                            ->orderBy('title', 'ASC')->get(),
+            'checkedProfessions' => collect(request('professions')), //La memoria que le viene del request
         ]);
     }
 
