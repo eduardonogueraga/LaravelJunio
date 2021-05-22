@@ -44,7 +44,7 @@ class TeamController extends Controller
     public function create(Team $team)
     {
         $professions = Profession::orderBy('title')->get();
-        return view('teams.create', ['team' => $team, 'professions' => $professions ]);
+        return view('teams.create', ['team' => $team, 'professions' => $professions,]);
     }
 
     public function store(CreateTeamRequest $request)

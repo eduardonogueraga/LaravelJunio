@@ -4,6 +4,11 @@
     <input type="text" name="name" placeholder="Nombre" value="{{old('name', $team->name)}}" class="form-control">
 </div>
 
+<div class="form-group">
+    <label for="headquarter">Direccion y nombre de la sede:</label>
+    <input type="text" name="headquarter" placeholder="Sede" value="{{old('headquarter', optional($team->headquarter)->name)}}" class="form-control">
+</div>
+
 <h5 class="mt-3">Profesiones</h5>
 @foreach($professions as $profession)
     <div class="form-check form-check-inline">

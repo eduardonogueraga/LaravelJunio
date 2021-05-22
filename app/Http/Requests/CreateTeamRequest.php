@@ -4,18 +4,20 @@ namespace App\Http\Requests;
 
 use App\Team;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\DB;
 
 class CreateTeamRequest extends FormRequest
 {
     public function rules()
     {
         return [
-          'name' => 'required',
+            'name' => ['required', 'regex:/^[a-zA-ZáéíóúñÑ\s\-]+$/'],
+            'headquarter' => ['required', 'regex:/^[a-zA-Z0-9áéíóúñÑ\s]+$/', 'unique:headquarters,name'],
             'professions' => [
                 'nullable',
-                'array'
+                'array',
+                'exists:professions,id'
             ]
-
         ];
     }
 
@@ -26,10 +28,13 @@ class CreateTeamRequest extends FormRequest
 
     public function createTeam()
     {
-       $team = Team::create([
-            'name' => $this->name,
-        ]);
+        DB::transaction(function (){
+            $team = Team::create(['name' => $this->name,]);
 
-        $team->professions()->attach($this->professions ?: []);
+            $team->headquarter()->create([
+                'name' => $this->headquarter,
+            ]);
+            $team->professions()->attach($this->professions ?: []);
+        });
     }
 }

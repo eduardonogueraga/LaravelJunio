@@ -3,16 +3,21 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\DB;
 
 class UpdateTeamRequest extends FormRequest
 {
     public function rules()
     {
         return [
-            'name' => 'required',
+            'name' => ['required', 'regex:/^[a-zA-ZáéíóúñÑ\s\-]+$/'],
+            'headquarter' => ['required',
+                              'regex:/^[a-zA-Z0-9áéíóúñÑ\s]+$/',
+                              'unique:headquarters,name,' .$this->team->headquarter->id], //Fitaje que busca id siempre y las comas del unique
             'professions' => [
                 'nullable',
-                'array'
+                'array',
+                'exists:professions,id'
             ]
         ];
     }
@@ -24,10 +29,12 @@ class UpdateTeamRequest extends FormRequest
 
     public function updateTeam($team)
     {
-        $team->update([
-            'name' => $this->name,
-        ]);
 
-        $team->professions()->sync($this->professions ?: []);
+        DB::transaction(function () use($team){
+            $team->update(['name' => $this->name,]);
+            $team->headquarter()->update(['name' => $this->headquarter]);
+            $team->professions()->sync($this->professions ?: []);
+        });
+
     }
 }
