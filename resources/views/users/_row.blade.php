@@ -6,7 +6,7 @@
             ({{ $user->role }})
         @endif
         <span class="status st-{{ $user->state }}"></span>
-        <span class="note">{{ $user->team->name }}</span>
+        <span class="note"><a style="color: #d33625" href="{{route('teams.show',  ['team' =>  intval($user->team->id)])}}">{{ $user->team->name }}</a></span>
         <span class="note">{{ $user->address->country->name }}</span>
     </th>
     <th scope="row">{{ $user->last }}</th>
