@@ -31,7 +31,10 @@ class TeamController extends Controller
         return view('teams.index', [
             'teams' => $teams,
             'view' => request()->routeIs('teams.trashed') ? 'trash' : 'index',
-            'headquarters' => Headquarter::orderBy('name', 'ASC')->get(),
+            'headquarters' => Headquarter::query() //Solo equipos com team
+                            ->with('team')
+                            ->whereHas('team')
+                            ->orderBy('name', 'ASC')->get(),
             'professions' => Profession::query() //Solo quiero professiones que esten en algun equipo
                             ->with('teams')
                             ->whereHas('teams')

@@ -15,4 +15,9 @@ class Headquarter extends Model
         return $this->hasOne(Country::class);
     }
 
+    public function team(){
+
+        return $this->belongsTo(Team::class);
+    }
+
 }
