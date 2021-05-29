@@ -15,7 +15,8 @@ class AddTeamIdToUsers extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->unsignedBigInteger('team_id')->nullable()->after('id');
-            $table->foreign('team_id')->references('id')->on('teams');
+            $table->boolean('is_leader')->default(false)->after('role');;
+            $table->foreign('team_id')->references('id')->on('teams')->onDelete('set null');
         });
     }
 
@@ -29,6 +30,7 @@ class AddTeamIdToUsers extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->dropForeign(['team_id']);
             $table->dropColumn('team_id');
+            $table->dropColumn('is_leader');
         });
     }
 }

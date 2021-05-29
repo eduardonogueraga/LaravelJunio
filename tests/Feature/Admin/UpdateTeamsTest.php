@@ -25,14 +25,22 @@ class UpdateTeamsTest extends TestCase
         $profession2 = Profession::factory()->create();
         $newProfession = Profession::factory()->create();
 
+        $leader = User::factory()->create();
+
         $oldTeam = Team::factory()->create();
+        $oldLeader = User::factory()->create();
+        $oldLeader->update([
+            'is_leader' => 1,
+            'team_id' => $oldTeam->id,
+        ]);
         $oldTeam->professions()->attach([$profession1->id, $profession2->id]);
 
         User::factory()->create(['team_id' => $oldTeam->id]);
 
         $this->from(route('teams.edit', ['team' => $oldTeam]))
             ->put(route('teams.update', ['team' => $oldTeam]), $this->withData([
-                'professions' => [$profession1->id, $newProfession->id]
+                'professions' => [$profession1->id, $newProfession->id],
+                'leader' => $leader->id,
             ]))->assertRedirect(route('teams.show', ['team' => $oldTeam->id]));
 
         $this->assertDatabaseHas('teams', [
@@ -138,11 +146,18 @@ class UpdateTeamsTest extends TestCase
         $profession2 = Profession::factory()->create();
 
         $team = Team::factory()->create();
+        $oldLeader = User::factory()->create();
+        $newLeader = User::factory()->create();
+        $oldLeader->update([
+            'is_leader' => 1,
+            'team_id' => $team->id,
+        ]);
         $team->professions()->attach([$profession1->id, $profession2->id]);
 
         $this->from(route('teams.edit', compact('team')))
             ->put(route('teams.update', compact('team')), $this->withData([
                 'professions' => [],
+                'leader' => $newLeader->id
             ]))->assertRedirect(route('teams.show', compact('team')));
 
         $this->assertDatabaseEmpty('profession_team');

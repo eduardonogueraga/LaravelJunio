@@ -5,6 +5,16 @@
 </div>
 
 <div class="form-group">
+    <label for="leader">Lider del equipo: </label>
+    <select name="leader" id="leader" class="form-control">
+        <option value="">Selecciona un usuario</option>
+        @foreach($leaders as $leader)
+            <option value="{{ $leader->id }}" {{(old('leader', $team->leader->id) == $leader->id ) ? ' selected' : '' }}>{{$leader->first_name . ' ' . $leader->last_name }}</option>
+        @endforeach
+    </select>
+</div>
+
+<div class="form-group">
     @foreach(range(0,2) as $x)
         <label for="headquarter-{{$x}}">Sede#{{$x}}</label>
         <input type="text" name="headquarters[]" id="headquarter-{{$x}}" class="form-control"

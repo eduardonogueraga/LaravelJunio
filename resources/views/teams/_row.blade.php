@@ -12,7 +12,7 @@
                 <a href="{{ route('teams.restore', $team) }}" class="btn btn-outline-secondary btn-sm"><span class="oi oi-action-undo"></span></a>
                 <button type="submit" class="btn btn-outline-danger btn-sm"><span class="oi oi-trash"></span></button>
             </form>
-        @elseif($team->users_count == 0)
+        @elseif($team->users_count <= 1)
             <form action="{{ route('teams.trash', $team) }}" method="POST">
                 @csrf
                 @method('PATCH')
@@ -28,5 +28,7 @@
 </tr>
 <tr class="skills">
     <td colspan="1"><span class="note">Sede principal del equipo: {{optional($team->mainHeadquarter)->name}}</span></td>
+    <td colspan="1"><span class="note">Lider del equipo: {{optional($team->leader)->first_name . ' ' . optional($team->leader)->last_name}}</span></td>
 </tr>
+
 

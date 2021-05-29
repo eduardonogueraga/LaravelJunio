@@ -32,6 +32,13 @@ class Team extends Model
         return $this->hasOne(Headquarter::class)->where('is_central', 1);
     }
 
+    public function leader()
+    {
+        return$this->hasOne(User::class)->where('is_leader', 1)->withDefault([
+            'first_name' => 'Sin lider'
+        ]);
+    }
+
     public function newEloquentBuilder($query)
     {
         return new TeamQuery($query);

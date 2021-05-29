@@ -5,7 +5,8 @@
 @section('content')
     <h1>{{ $team->name }}</h1>
 
-    <p>Nombre del equipo: {{ $team->name }}</p>
+    <h3>Lider</h3>
+    <p>Equipo liderado por: {{ $team->leader->first_name . ' ' . $team->leader->last_name}}</p>
 
     <h3>Oficina central</h3>
     <p>{{$team->mainHeadquarter->name}}</p>
@@ -21,6 +22,28 @@
     </ul>
     @endif
 
+    <h3>Trabajadores</h3>
+    @forelse($team->users as $user)
+        <ul>
+            <li>{{$user->first_name .' '. $user->last_name}}
+                <span class="status st-{{ $user->state }}"></span>
+                <span>{{($team->leader->id == $user->id) ? '(Lider del equipo)' : ''}}</span>
+            </li>
+        </ul>
+    @empty
+        <p>Este equipo no tiene trabajadores</p>
+    @endforelse
+
+    <h3>Trabajadores en activo</h3>
+    @forelse($team->users->filter(function($field) {return $field->active;}) as $user)
+        <ul>
+            <li>{{$user->first_name .' '. $user->last_name}}
+                <span>{{($team->leader->id == $user->id) ? '(Lider del equipo)' : ''}}</span>
+            </li>
+        </ul>
+    @empty
+        <p>Este equipo no tiene trabajadores en activo</p>
+    @endforelse
 
     <h3>Perfiles profesionales</h3>
     @forelse($team->professions as $profession)

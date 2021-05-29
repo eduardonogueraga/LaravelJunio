@@ -45,6 +45,7 @@ class UserSeeder extends Seeder
             'email' => 'pepe@mail.es',
             'password' => bcrypt('123456'),
             'role' => 'admin',
+            'is_leader' => true,
             'created_at' => now(),
             'active' => true,
         ]);
@@ -73,6 +74,13 @@ class UserSeeder extends Seeder
             'active' => rand(0, 4) ? true : false,
             'created_at' => now()->subDays(rand(1, 90)),
         ]);
+
+        if($user->team->id)
+        {
+            if(empty($user->team->users->id)) {
+                $user->update(['is_leader' => 1,]);
+            }
+        }
 
         $user->skills()->attach($this->skills->random(rand(0, 7)));
 

@@ -5,6 +5,7 @@ namespace Tests\Feature\Admin;
 use App\Headquarter;
 use App\Profession;
 use App\Team;
+use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use function PHPUnit\Framework\assertCount;
@@ -16,6 +17,7 @@ class CreateTeamsTest extends TestCase
 
     protected $defaultData = [
         'name' => 'Alpacas Manuel',
+        'leader' => '',
         'headquarters' => ['Bogota'],
         'professions' => '',
     ];
@@ -24,10 +26,12 @@ class CreateTeamsTest extends TestCase
     public function it_creates_a_new_team()
     {
         $profession = Profession::factory()->create();
+        $leader  = User::factory()->create();
 
        $this->from('/equipos/crear')
            ->post('/equipos/', $this->withData([
-               'professions' => [$profession->id]
+               'professions' => [$profession->id],
+               'leader' => $leader->id,
            ]))->assertRedirect('/equipos/');
 
        $this->assertDatabaseHas('teams', [
@@ -132,9 +136,12 @@ class CreateTeamsTest extends TestCase
     /** @test  */
     function the_profession_field_is_optional()
     {
+        $leader = User::factory()->create();
+
         $this->from(route('teams.create'))
             ->post(route('teams.store', $this->withData([
-                'professions' => []
+                'professions' => [],
+                'leader' => $leader->id,
             ])))
             ->assertRedirect(route('teams.index'));
 
