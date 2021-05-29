@@ -22,9 +22,14 @@ class Team extends Model
         return $this->hasMany(User::class);
     }
 
-    public function headquarter()
+    public function headquarters()
     {
-        return $this->hasOne(Headquarter::class);
+        return $this->hasMany(Headquarter::class);
+    }
+
+    public function mainHeadquarter()
+    {
+        return $this->hasOne(Headquarter::class)->where('is_central', 1);
     }
 
     public function newEloquentBuilder($query)

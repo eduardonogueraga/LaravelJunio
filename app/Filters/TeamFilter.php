@@ -44,7 +44,7 @@ class TeamFilter extends QueryFilter
 
     public function headquarter($query, $headquarter)
     {
-        return $query->whereHas('headquarter', function ($query) use ($headquarter){
+        return $query->whereHas('headquarters', function ($query) use ($headquarter){
             return $query->whereName($headquarter);
         });
     }
@@ -71,7 +71,7 @@ class TeamFilter extends QueryFilter
     {
         return $query->where(function ($query) use($search){
             return $query->where('name', 'like', "%$search%")
-                ->orWhereHas('headquarter', function ($query) use ($search){
+                ->orWhereHas('headquarters', function ($query) use ($search){
                     return $query->where('name', 'like',"%$search%" );
                 });
         });

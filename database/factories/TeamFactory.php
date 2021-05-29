@@ -20,7 +20,15 @@ class TeamFactory extends Factory
     public function configure()
     {
         return $this->afterCreating(function ($team) {
-            $team->headquarter()->save(Headquarter::factory()->make()); //Lo crea y la relacion le pone el id
+
+            $headquarters = []; //Array de instancias del factory
+
+            foreach (range(1, rand(1,3)) as $i){
+                array_push($headquarters, $this->getMake($i == 1));
+            }
+            foreach ($headquarters as $headquarter){
+                $team->headquarters()->save($headquarter);
+            }
         });
     }
 
@@ -34,5 +42,15 @@ class TeamFactory extends Factory
         return [
             'name' => $this->faker->unique()->company,
         ];
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|mixed
+     */
+    public function getMake($central = false)
+    {
+        return Headquarter::factory()->make([
+            'is_central' => $central,
+        ]);
     }
 }

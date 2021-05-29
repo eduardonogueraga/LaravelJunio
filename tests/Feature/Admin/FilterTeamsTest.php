@@ -41,7 +41,7 @@ class FilterTeamsTest extends TestCase
 
         $response->assertViewCollection('headquarters')
             ->notContains($headSinTeam)
-            ->contains($team->headquarter()->first());
+            ->contains($team->headquarters()->first());
 
         /* //Version pura
          * $response->assertViewHas('headquarters', function ($headquarters) use ($team){
@@ -114,8 +114,8 @@ class FilterTeamsTest extends TestCase
         $team1 = Team::factory()->create();
         $team2 = Team::factory()->create();
 
-        $team1->headquarter()->update(['name' => '302 Alpacas St']);
-        $team2->headquarter()->update(['name' => '756 Zorintio Av']);
+        $team1->headquarters[0]->update(['name' => '302 Alpacas St']);
+        $team2->headquarters[0]->update(['name' => '756 Zorintio Av']);
 
         $response = $this->get(route('teams.index', ['headquarter' => '756 Zorintio Av']));
         $response->assertOk();

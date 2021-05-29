@@ -2,10 +2,13 @@
 
 namespace Tests\Feature\Admin;
 
+use App\Headquarter;
 use App\Profession;
 use App\Team;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use function PHPUnit\Framework\assertCount;
+use function PHPUnit\Framework\assertTrue;
 
 class CreateTeamsTest extends TestCase
 {
@@ -13,7 +16,7 @@ class CreateTeamsTest extends TestCase
 
     protected $defaultData = [
         'name' => 'Alpacas Manuel',
-        'headquarter' => 'Bogota',
+        'headquarters' => ['Bogota'],
         'professions' => '',
     ];
 
@@ -75,14 +78,14 @@ class CreateTeamsTest extends TestCase
     }
 
     /** @test  */
-    function the_headquarters_field_is_required()
+    function the_main_headquarter_field_is_required()
     {
         $this->handleValidationExceptions();
 
         $this->from(route('teams.create'))
             ->post(route('teams.store', $this->withData([
-                'headquarter' => null,
-            ])))->assertSessionHasErrors(['headquarter'])
+                'headquarters' => null,
+            ])))->assertSessionHasErrors(['headquarters.0'])
             ->assertRedirect(url()->previous());
 
         $this->assertDatabaseEmpty('teams');
@@ -96,8 +99,8 @@ class CreateTeamsTest extends TestCase
 
         $this->from(route('teams.create'))
             ->post(route('teams.store', $this->withData([
-                'headquarter' => '@#~€¬123avc',
-            ])))->assertSessionHasErrors(['headquarter'])
+                'headquarters' => '@#~€¬123avc',
+            ])))->assertSessionHasErrors(['headquarters.*'])
             ->assertRedirect(url()->previous());
 
         $this->assertDatabaseEmpty('teams');
@@ -110,21 +113,20 @@ class CreateTeamsTest extends TestCase
         $this->handleValidationExceptions();
 
         $team = Team::factory()->create();
-        $team->headquarter()->update([
+        $team->headquarters[0]->update([
             'name' => 'Sede 123',
         ]);
 
         $this->from(route('teams.create'))
             ->post(route('teams.store', $this->withData([
-                'headquarter' => 'Sede 123',
-            ])))->assertSessionHasErrors(['headquarter'])
+                'headquarters' => 'Sede 123',
+            ])))->assertSessionHasErrors(['headquarters.*'])
             ->assertRedirect(url()->previous());
 
         $this->assertDatabaseMissing('teams', [
             'name' => 'Alpacas Manuel'
         ]);
-
-        $this->assertDatabaseCount('headquarters', 1);
+        assertTrue((Headquarter::where('name','Sede 123')->count()) == 1);
     }
 
     /** @test  */

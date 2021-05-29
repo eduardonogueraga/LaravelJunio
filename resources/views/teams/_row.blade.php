@@ -27,6 +27,6 @@
     </td>
 </tr>
 <tr class="skills">
-    <td colspan="1"><span class="note">Sede del equipo: {{optional($team->headquarter)->name}}</span></td>
+    <td colspan="1"><span class="note">Sede principal del equipo: {{optional($team->mainHeadquarter)->name}}</span></td>
 </tr>
 

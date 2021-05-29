@@ -14,7 +14,7 @@ class UpdateTeamsTest extends TestCase
 
     protected $defaultData = [
         'name' => 'Alpacas Manuel',
-        'headquarter' => 'Bogota',
+        'headquarters' => ['Bogota'],
         'professions' => '',
     ];
 
@@ -104,12 +104,12 @@ class UpdateTeamsTest extends TestCase
 
         $this->from(route('teams.edit', compact('team')))
             ->put(route('teams.update', compact('team')), $this->withData([
-                'headquarter' => null,
-            ]))->assertSessionHasErrors(['headquarter'])
+                'headquarters' => null,
+            ]))->assertSessionHasErrors(['headquarters.*'])
             ->assertRedirect(url()->previous());
 
         $this->assertDatabaseHas('headquarters', [
-            'name' => $team->headquarter->name, //Como metodo() trae la relacion como ref el array
+            'name' => $team->headquarters[0]->name, //Como metodo() trae la relacion como ref el array
         ]);
     }
 
@@ -121,12 +121,12 @@ class UpdateTeamsTest extends TestCase
 
         $this->from(route('teams.edit', compact('team')))
             ->put(route('teams.update', compact('team')), $this->withData([
-                'headquarter' => '#€~#€~#@',
-            ]))->assertSessionHasErrors(['headquarter'])
+                'headquarters' => '#€~#€~#@',
+            ]))->assertSessionHasErrors(['headquarters.*'])
             ->assertRedirect(url()->previous());
 
         $this->assertDatabaseHas('headquarters', [
-            'name' => $team->headquarter->name
+            'name' => $team->headquarters[0]->name
         ]);
 
     }

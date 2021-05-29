@@ -5,9 +5,17 @@
 </div>
 
 <div class="form-group">
-    <label for="headquarter">Direccion y nombre de la sede:</label>
-    <input type="text" name="headquarter" placeholder="Sede" value="{{old('headquarter', optional($team->headquarter)->name)}}" class="form-control">
+    @foreach(range(0,2) as $x)
+        <label for="headquarter-{{$x}}">Sede#{{$x}}</label>
+        <input type="text" name="headquarters[]" id="headquarter-{{$x}}" class="form-control"
+       @if (isset($team->headquarters[$x]) && is_object($team->headquarters[$x]))
+             value="{{old('headquarters.'. $x, $team->headquarters[$x]->name)}}">
+        @else
+            value="{{old('headquarters.'. $x)}}">
+        @endif
+    @endforeach
 </div>
+
 
 <h5 class="mt-3">Profesiones</h5>
 @foreach($professions as $profession)

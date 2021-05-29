@@ -11,6 +11,7 @@ class CreateHeadquartersTable extends Migration
         Schema::create('headquarters', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name')->unique();
+            $table->boolean('is_central')->default(false);
             $table->softDeletes();
             $table->timestamps();
         });

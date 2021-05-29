@@ -12,12 +12,20 @@ class CreateTeamRequest extends FormRequest
     {
         return [
             'name' => ['required', 'regex:/^[a-zA-ZáéíóúñÑ\s\-]+$/'],
-            'headquarter' => ['required', 'regex:/^[a-zA-Z0-9áéíóúñÑ\s]+$/', 'unique:headquarters,name'],
+            'headquarters.0' =>  ['required', 'regex:/^[a-zA-Z0-9áéíóúñÑ\s]+$/', 'unique:headquarters,name'],
+            'headquarters.*' =>  ['nullable', 'distinct', 'regex:/^[a-zA-Z0-9áéíóúñÑ\s]+$/', 'unique:headquarters,name'],
             'professions' => [
                 'nullable',
                 'array',
                 'exists:professions,id'
             ]
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'headquarters.0.required' => 'Al menos la sede central es obligatoria',
         ];
     }
 
@@ -31,9 +39,13 @@ class CreateTeamRequest extends FormRequest
         DB::transaction(function (){
             $team = Team::create(['name' => $this->name,]);
 
-            $team->headquarter()->create([
-                'name' => $this->headquarter,
-            ]);
+            foreach ($this->headquarters as  $key => $head){
+                if($head == null){continue;}
+                $team->headquarters()->create([
+                    'name' => $head,
+                    'is_central' => $key == 0, //Condicion
+                ]);
+            }
             $team->professions()->attach($this->professions ?: []);
         });
     }

@@ -9,7 +9,7 @@ class AddTeamIdToHeadquarters extends Migration
     public function up()
     {
         Schema::table('headquarters', function (Blueprint $table) {
-            $table->unsignedBigInteger('team_id')->unique()->nullable()->after('id'); //Ese unique es para el 1:1
+            $table->unsignedBigInteger('team_id')->nullable()->after('id'); //Unique es para el 1:1
             $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
         });
     }

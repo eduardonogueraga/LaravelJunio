@@ -44,11 +44,11 @@ class SearchTeamsTest extends TestCase
         $team1 = Team::factory()->create();
         $team2 = Team::factory()->create();
 
-        $team1->headquarter()->update([
+        $team1->headquarters[0]->update([
             'name' => 'Sede Madrid',
         ]);
 
-        $team2->headquarter()->update([
+        $team2->headquarters[0]->update([
             'name' => 'Sede Barcelona',
         ]);
 
@@ -66,15 +66,15 @@ class SearchTeamsTest extends TestCase
         $team2 = Team::factory()->create();
         $team3 = Team::factory()->create();
 
-        $team1->headquarter()->update([
+        $team1->headquarters[0]->update([
             'name' => 'Sede Madrid',
         ]);
 
-        $team2->headquarter()->update([
+        $team2->headquarters[0]->update([
             'name' => 'Sede Barcelona',
         ]);
 
-        $team3->headquarter()->update([
+        $team3->headquarters[0]->update([
             'name' => 'Sede Badalona',
         ]);
 
