@@ -54,6 +54,10 @@ Route::patch('/equipos/{team}/papelera', 'TeamController@trash')->name('teams.tr
 Route::delete('/equipos/{team}', 'TeamController@destroy')->name('teams.destroy');
 
 
+Route::get('/proyectos/', 'ProjectController@index')->name('projects.index');
+Route::get('/proyectos/{project}/show', 'ProjectController@show')->name('projects.show');
+
+
 Route::get('/habilidades/', 'SkillController@index')->name('skills.index');
 
 Route::get('/saludo/{name}/{nickname?}', 'WelcomeUserController');

@@ -19,7 +19,7 @@ class Team extends Model
 
     public function users()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(User::class)->with('team'); //Para la relacion inversa ($users as user->team)
     }
 
     public function headquarters()
@@ -37,6 +37,11 @@ class Team extends Model
         return$this->hasOne(User::class)->where('is_leader', 1)->withDefault([
             'first_name' => 'Sin lider'
         ]);
+    }
+
+    public function projects()
+    {
+        return  $this->belongsToMany(Project::class);
     }
 
     public function newEloquentBuilder($query)

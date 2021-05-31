@@ -69,6 +69,9 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="{{ route('teams.index') }}">Equipos <span class="sr-only">(current)</span></a>
                 </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ route('projects.index') }}">Proyectos <span class="sr-only">(current)</span></a>
+                </li>
             </ul>
         </div>
     </nav>
