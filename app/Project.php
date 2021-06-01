@@ -19,6 +19,11 @@ class Project extends Model
             ->withPivot(['is_head_team']);
     }
 
+    public function newEloquentBuilder($query)
+    {
+        return new ProjectQuery($query);
+    }
+
 
 
 }

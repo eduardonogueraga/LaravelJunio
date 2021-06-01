@@ -12,6 +12,7 @@ class ProjectController extends Controller
     {
         $projects = Project::query()
                             ->with('teams')
+                            ->applyFilters()
                             ->orderBy('title', 'ASC')
                             ->paginate();
 

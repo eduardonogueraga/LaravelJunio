@@ -36,6 +36,14 @@
 
     <h3>Fecha limite</h3>
     <p>{{$project->finish_date}}</p>
+    <h4>Tiempo restante</h4>
+
+    @if(\Carbon\Carbon::parse($project->finish_date)->isFuture())
+        <p>{{now()->diffForHumans(\Carbon\Carbon::parse($project->finish_date))}}</p>
+    @else
+        <p>Se ha vencido el plazo</p>
+    @endif
+
     <p>
         <a href="{{  route('teams.index') }}">Regresar al listado de proyectos</a>
     </p>

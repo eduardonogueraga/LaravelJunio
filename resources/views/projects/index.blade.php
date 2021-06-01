@@ -7,6 +7,8 @@
         <h1 class="pb-1">{{trans('projects.title.index')}}</h1>
     </div>
 
+    @include('projects._filters')
+
     @if ($projects->isNotEmpty())
 
         <div class="table-responsive-lg">

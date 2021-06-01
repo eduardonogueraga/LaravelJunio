@@ -1,9 +1,9 @@
 <tr>
     <td rowspan="2">{{ $project->id }}</td>
-    <th scope="row">{{ $project->title }}</th>
+    <th scope="row">{{ $project->title }}<span class="status st-{{($project->status)? 'active' : 'inactive' }}"></span></th>
     <td scope="row">{{ $project->budget }} €</td>
     <td scope="row">{{ ($project->status)? 'Terminado' : 'Pendiente' }}</td>
-    <td scope="row">{{ $project->finish_date }}</td>
+    <td scope="row" style="color: {{(\Carbon\Carbon::parse($project->finish_date)->isFuture())? '#000000' : '#ff0000'}}">{{ $project->finish_date }}</td>
     <td class="text-right">
         <a href="{{route('projects.show', ['project' => $project])}}" class="btn btn-outline-secondary btn-sm"><span class="oi oi-eye"></span></a>
         <a href="" class="btn btn-outline-secondary btn-sm"><span class="oi oi-pencil"></span></a>
