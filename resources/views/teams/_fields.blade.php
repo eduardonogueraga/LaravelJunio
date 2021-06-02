@@ -32,7 +32,7 @@
     <div class="form-check form-check-inline">
         <input name="professions[{{ $profession->id }}]" class="form-check-input" type="checkbox"
                id="profession_{{ $profession->id }}" value="{{ $profession->id }}"
-                {{ ($errors->any() ? old('professions['.$profession->id.']') : $team->professions->contains($profession)) ? 'checked' : '' }}>
+                {{ ($errors->any() ? old('professions.'.$profession->id) : $team->professions->contains($profession)) ? 'checked' : '' }}>
         <label class="form-check-label" for="skill_{{ $profession->id }}">{{ $profession->title }}</label>
     </div>
 @endforeach

@@ -56,6 +56,10 @@ Route::delete('/equipos/{team}', 'TeamController@destroy')->name('teams.destroy'
 
 Route::get('/proyectos/', 'ProjectController@index')->name('projects.index');
 Route::get('/proyectos/{project}/show', 'ProjectController@show')->name('projects.show');
+Route::get('/proyectos/crear', 'ProjectController@create')->name('projects.create');
+Route::post('/proyectos/' , 'ProjectController@store')->name('projects.store');
+Route::get('proyectos/{project}/editar', 'ProjectController@edit')->name('projects.edit');
+Route::put('proyectos/{project}', 'ProjectController@update')->name('projects.update');
 
 
 Route::get('/habilidades/', 'SkillController@index')->name('skills.index');

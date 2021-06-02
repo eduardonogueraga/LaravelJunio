@@ -113,6 +113,12 @@
         locale: 'es-es',
         weekStartDay: 1,
     });
+    $('#finish_date').datepicker({
+        uiLibrary: 'bootstrap4',
+        format: 'dd/mm/yyyy',
+        locale: 'es-es',
+        weekStartDay: 1,
+    });
 </script>
 
 </body>

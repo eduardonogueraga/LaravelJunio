@@ -5,6 +5,7 @@
 @section('content')
     <div class="d-flex justify-content-between align-items-end mb-3">
         <h1 class="pb-1">{{trans('projects.title.index')}}</h1>
+        <p> <a href="{{ route('projects.create') }}" class="btn btn-primary">Nuevo proyecto</a></p>
     </div>
 
     @include('projects._filters')

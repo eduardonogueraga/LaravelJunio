@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateProjectRequest;
+use App\Http\Requests\UpdateProjectRequest;
 use App\Project;
 use App\Sortable;
+use App\Team;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class ProjectController extends Controller
 {
@@ -22,25 +26,34 @@ class ProjectController extends Controller
         return view('projects.index', compact('projects', 'sortable'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+
+    public function create(Project $project)
     {
-        //
+
+        $teams = Team::query()
+            ->with('users')
+            ->with('projects')
+            ->has('users')
+            ->withCount('users')
+            ->withCount('projects')
+//            ->whereHas('projects', function ($query){
+//                return $query->where('status', 0);
+//            })
+            ->orderBy('name')
+            ->get();
+
+
+        return  view('projects.create', [
+            'project' => $project,
+            'teams' => $teams,
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+
+    public function store(CreateProjectRequest $request)
     {
-        //
+        $request->createProject();
+        return redirect(route('projects.index'));
     }
 
 
@@ -49,27 +62,43 @@ class ProjectController extends Controller
         return view('projects.show', compact('project'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+
+    public function edit(Project $project)
     {
-        //
+
+        $teams = Team::query()
+            ->with('users')
+            ->with('projects')
+            ->has('users')
+            ->withCount('users')
+            ->withCount('projects')
+//            ->whereHas('projects', function ($query){
+//                return $query->where('status', 0);
+//            })
+            ->orderBy('name')
+            ->get();
+
+        return view('projects.edit', [
+            'project' => $project,
+             'teams' => $teams,
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function update(UpdateProjectRequest $request, Project $project)
     {
-        //
+        $oldFinishDate = Carbon::parse($project->finish_date)->startOfDay(); //Pone los stamps a 0
+        $newFinishDate = Carbon::createFromFormat('d/m/Y', $request->finish_date)->startOfDay();
+
+        $request->validate([
+            'finish_date' => ['required',
+                            'date_format:d/m/Y',
+                            ($oldFinishDate != $newFinishDate)?'after:start_day' : ''
+            ],
+        ]);
+
+
+        $request->updateProject($project);
+        return redirect(route('projects.show', ['project' => $project]));
     }
 
     /**
