@@ -60,6 +60,7 @@ Route::get('/proyectos/crear', 'ProjectController@create')->name('projects.creat
 Route::post('/proyectos/' , 'ProjectController@store')->name('projects.store');
 Route::get('proyectos/{project}/editar', 'ProjectController@edit')->name('projects.edit');
 Route::put('proyectos/{project}', 'ProjectController@update')->name('projects.update');
+Route::delete('/proyectos/{project}', 'ProjectController@destroy')->name('projects.destroy');
 
 
 Route::get('/habilidades/', 'SkillController@index')->name('skills.index');

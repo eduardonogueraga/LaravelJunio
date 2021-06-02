@@ -7,6 +7,11 @@
     <td class="text-right">
         <a href="{{route('projects.show', ['project' => $project])}}" class="btn btn-outline-secondary btn-sm"><span class="oi oi-eye"></span></a>
         <a href="{{route('projects.edit', ['project' => $project])}}" class="btn btn-outline-secondary btn-sm"><span class="oi oi-pencil"></span></a>
+        <form action="{{ route('projects.destroy', $project) }}" method="post">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-outline-danger btn-sm"><span class="oi oi-trash"></span></button>
+        </form>
     </td>
 </tr>
 <tr class="skills">
