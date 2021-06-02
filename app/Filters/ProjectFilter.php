@@ -5,12 +5,26 @@ namespace App\Filters;
 
 
 
+use App\Rules\SortableColumn;
+use App\Sortable;
 use DB;
 use Illuminate\Support\Carbon;
 
 
 class ProjectFilter extends QueryFilter
 {
+
+    protected $aliasses = [
+        'titulo' => 'title',
+        'presupuesto' => 'budget',
+        'estado' => 'status',
+        'plazo' => 'finish_date',
+    ];
+
+    public function getColumnName($alias)
+    {
+        return $this->aliasses[$alias] ?? $alias;
+    }
 
     public function rules(): array
     {
@@ -23,6 +37,7 @@ class ProjectFilter extends QueryFilter
            'budget' => 'numeric|min:1|max:10',
            'teams' => 'numeric',
            'workers' => 'numeric',
+           'order' => [new SortableColumn(['titulo', 'presupuesto','estado', 'plazo'])]
            ];
     }
 
@@ -82,6 +97,13 @@ class ProjectFilter extends QueryFilter
                        ->where('is_head_team', 1); //Desde el pivote
                 });
         });
+    }
+
+
+    public function order($query, $value)
+    {
+        [$column, $direction] = Sortable::info($value);
+        $query->orderBy($this->getColumnName($column), $direction);
     }
 
     /**

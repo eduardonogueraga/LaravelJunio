@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Project;
+use App\Sortable;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
 
-    public function index()
+    public function index(Sortable $sortable)
     {
         $projects = Project::query()
                             ->with('teams')
@@ -16,7 +17,9 @@ class ProjectController extends Controller
                             ->orderBy('title', 'ASC')
                             ->paginate();
 
-        return view('projects.index', compact('projects'));
+        $sortable->appends($projects->parameters());
+
+        return view('projects.index', compact('projects', 'sortable'));
     }
 
     /**

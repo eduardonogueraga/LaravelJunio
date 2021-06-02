@@ -16,10 +16,10 @@
                 <thead class="thead-dark">
                 <tr>
                     <th scope="col"># <span class="oi oi-caret-bottom"></span><span class="oi oi-caret-top"></span></th>
-                    <th scope="col">Titulo del proyecto</th>
-                    <th scope="col">Presupuesto</th>
-                    <th scope="col">Estado</th>
-                    <th scope="col">Plazo de finalización</th>
+                    <th scope="col"><a href="{{ $sortable->url('titulo') }}" class="{{ $sortable->classes('titulo') }}">Titulo del proyecto</a></th>
+                    <th scope="col"><a href="{{ $sortable->url('presupuesto') }}" class="{{ $sortable->classes('presupuesto') }}">Presupuesto</a></th>
+                    <th scope="col"><a href="{{ $sortable->url('estado') }}" class="{{ $sortable->classes('estado') }}">Estado</a></th>
+                    <th scope="col"><a href="{{ $sortable->url('plazo') }}" class="{{ $sortable->classes('plazo') }}">Plazo de finalización</a></th>
                     <th scope="col" class="text-right th-actions">Acciones</th>
                 </tr>
                 </thead>
