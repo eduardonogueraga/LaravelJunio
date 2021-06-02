@@ -7,7 +7,7 @@
     @slot('header', 'Editar perfil')
     @include('shared._errors')
 
-    <form method="post" action="{{ url('/editar-perfil/') }}">
+    <form method="post" action="{{ route('profile.update', ['user' => $user]) }}">
         {{ method_field('PUT') }}
         {{ csrf_field() }}
 
@@ -27,6 +27,11 @@
             <label for="bio">Biografía:</label>
             <textarea name="bio" placeholder="Biografía" class="form-control">{{ old('bio', $user->profile->bio) }}</textarea>
         </div>
+        <div class="form-group">
+            <label for="telephone">Telefono:</label>
+            <input type="text" name="telephone" placeholder="Telefono (Opcional)" value="{{ old('telephone', $user->profile->telephone) }}" class="form-control">
+        </div>
+
         <div class="form-group">
             <label for="profession_id">Profesión: </label>
             <select name="profession_id" id="profession_id" class="form-control">

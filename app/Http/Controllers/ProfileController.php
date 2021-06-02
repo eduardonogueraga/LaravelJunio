@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateProfileRequest;
 use App\User;
 use App\Profession;
 use Illuminate\Http\Request;
@@ -18,22 +19,11 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function update(Request $request)
+    public function update(UpdateProfileRequest $request, User $user)
     {
-        $user = User::first(); //$user = auth()->user();
-
-        $user->update([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-        ]);
-
-        $user->profile->update([
-            'bio' => $request->bio,
-            'twitter' => $request->twitter,
-            'profession_id' => $request->profession_id
-        ]);
-
-        return back();
+        //$user = User::first(); //$user = auth()->user();
+        $request->updateProfile($user);
+         return redirect(route('profile.edit'));
+        //return back();
     }
 }

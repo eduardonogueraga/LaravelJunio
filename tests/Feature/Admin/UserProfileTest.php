@@ -19,6 +19,7 @@ class UserProfileTest extends TestCase
         'email' => 'pepe@mail.es',
         'bio' => 'Programador de Laravel y Vue.js',
         'twitter' => 'https://twitter.com/pepe',
+        'telephone' => '404 626-34-2223'
     ];
 
     /** @test */
@@ -38,7 +39,7 @@ class UserProfileTest extends TestCase
         $response = $this->get('/editar-perfil/');
         $response->assertStatus(200);
 
-        $response = $this->put('editar-perfil/', [
+        $response = $this->put("editar-perfil/{$user->id}", [
             'first_name' => 'Pepe',
             'last_name' => 'Pérez',
             'email' => 'pepe@mail.es',
@@ -82,7 +83,7 @@ class UserProfileTest extends TestCase
         $newSkill = Skill::factory()->create();
         $user->skills()->attach([$oldSkill->id]);
 
-        $response = $this->put('/editar-perfil/', $this->withData(['skills' => [$newSkill->id],]));
+        $response = $this->put("editar-perfil/{$user->id}", $this->withData(['skills' => [$newSkill->id],]));
 
         $response->assertRedirect();
 
@@ -104,7 +105,7 @@ class UserProfileTest extends TestCase
             'role' => 'user',
         ]);
 
-        $response = $this->put('/editar-perfil/', $this->withData([
+        $response = $this->put("editar-perfil/{$user->id}", $this->withData([
             'role' => 'admin',
         ]));
 
@@ -123,7 +124,7 @@ class UserProfileTest extends TestCase
             'password' => bcrypt('old123'),
         ]);
 
-        $response = $this->put('/editar-perfil/', $this->withData([
+        $response = $this->put("editar-perfil/{$user->id}", $this->withData([
             'email' => 'pepe@mail.es',
             'password' => 'new456',
         ]));

@@ -55,6 +55,7 @@ class UserSeeder extends Seeder
         $admin->profile()->create([
             'bio' => 'Programador',
             'profession_id' => $this->professions->where('title', 'Desarrollador Back-End')->first()->id,
+            'telephone' => '555 626-34-2223'
         ]);
 
         $admin->address()->create([

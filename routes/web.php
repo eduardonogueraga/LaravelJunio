@@ -28,8 +28,8 @@ Route::get('usuarios/{user}', 'UserController@show')->where('user', '[0-9]+')->n
 Route::patch('/usuarios/{user}/papelera', 'UserController@trash')->name('users.trash');
 
 
-Route::get('/editar-perfil/', 'ProfileController@edit');
-Route::put('/editar-perfil/', 'ProfileController@update');
+Route::get('/editar-perfil/', 'ProfileController@edit')->name('profile.edit');
+Route::put('/editar-perfil/{user}', 'ProfileController@update')->name('profile.update');
 
 Route::get('/profesiones/', 'ProfessionController@index')->name('professions.index');
 
