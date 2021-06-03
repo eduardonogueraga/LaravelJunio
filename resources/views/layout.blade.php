@@ -126,5 +126,16 @@
     });
 </script>
 
+<script>
+    jQuery(document).ready(function($){
+        $("form").submit(function() {
+            $(this).find(":input").filter(function(){ return !this.value; }).attr("disabled", "disabled");
+            return true;
+        });
+        $( "form" ).find( ":input" ).prop( "disabled", false );
+
+    });
+</script>
+
 </body>
 </html>
