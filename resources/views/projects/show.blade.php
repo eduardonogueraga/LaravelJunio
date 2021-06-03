@@ -35,11 +35,11 @@
     </ul>
 
     <h3>Fecha limite</h3>
-    <p>{{\Carbon\Carbon::parse($project->finish_date)->format('d-m-Y')}}</p>
+    <p>{{$project->finish_date->format('d-m-Y')}}</p>
     <h4>Tiempo restante</h4>
 
-    @if(\Carbon\Carbon::parse($project->finish_date)->isFuture())
-        <p>{{now()->diffForHumans(\Carbon\Carbon::parse($project->finish_date))}}</p>
+    @if($project->finish_date->isFuture())
+        <p>{{now()->diffForHumans($project->finish_date)}}</p>
     @else
         <p>Se ha vencido el plazo</p>
     @endif

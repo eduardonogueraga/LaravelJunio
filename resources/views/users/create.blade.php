@@ -4,7 +4,6 @@
 
 @section('content')
     @card
-    <div>Crear nuevo usuario</div>
         @slot('header', 'Crear nuevo usuario')
         @include('shared._errors')
 

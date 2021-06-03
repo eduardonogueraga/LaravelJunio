@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Project extends Model
 {
+    protected $dates = ['finish_date']; //Parsear a carbon
+
     use HasFactory, SoftDeletes;
     protected $guarded = [];
 
