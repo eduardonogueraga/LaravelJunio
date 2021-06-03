@@ -54,6 +54,26 @@
         <p>Sin un perfil definido</p>
     @endforelse
 
+    <h3>Proyectos en los que participa</h3>
+    @forelse($team->projects->filter(function($field) {return $field->status == false;}) as $project)
+        <ul>
+            <li>{{$project->title}}<span class="note"><a href="{{route('projects.show', ['project' => intval($project->id)])}}">Ver detallles</a></span></li>
+        </ul>
+    @empty
+        <p>Este equipo no tiene proyectos asociados</p>
+    @endforelse
+
+
+    <h3>Proyectos finalizados</h3>
+    @forelse($team->projects->filter(function($field) {return $field->status == true;}) as $project)
+        <ul>
+            <li>{{$project->title}}</li><span class="note"><a href="{{route('projects.show', ['project' => intval($project->id)])}}">Ver detallles</a></span>
+        </ul>
+    @empty
+        <p>Este equipo no tiene proyectos finalizados</p>
+    @endforelse
+
+
     <p>
         @if(url()->previous() == route('teams.edit',  ['team' =>  intval($team->id)]))
             <a href="{{  route('teams.index') }}">Regresar al listado de equipos</a>

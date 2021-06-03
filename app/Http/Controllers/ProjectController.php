@@ -30,11 +30,9 @@ class ProjectController extends Controller
     public function create(Project $project)
     {
         $teams = Team::query()
-            ->with('users')
-            ->with('activeProjects')
+            ->with('users', 'activeProjects')
             ->has('users')
-            ->withCount('users')
-            ->withCount('activeProjects')
+            ->withCount('users','activeProjects')
             ->orderBy('name')
             ->get();
 
@@ -62,14 +60,9 @@ class ProjectController extends Controller
     {
 
         $teams = Team::query()
-            ->with('users')
-            ->with('projects')
+            ->with('users', 'activeProjects')
             ->has('users')
-            ->withCount('users')
-            ->withCount('projects')
-//            ->whereHas('projects', function ($query){
-//                return $query->where('status', 0);
-//            })
+            ->withCount('users','activeProjects')
             ->orderBy('name')
             ->get();
 

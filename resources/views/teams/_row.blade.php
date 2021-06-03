@@ -3,6 +3,7 @@
     <th scope="row">{{ $team->name }}</th>
     <td scope="row">{{ $team->users_count }}</td>
     <td scope="row">{{ $team->professions_count }}</td>
+    <td scope="row">{{ $team->active_projects_count }}</td>
     <td class="text-right">
 
         @if($team->trashed())

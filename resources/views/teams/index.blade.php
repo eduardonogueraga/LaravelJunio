@@ -27,6 +27,7 @@
                     <th scope="col"><a href="{{ $sortable->url('nombre_empresa') }}" class="{{ $sortable->classes('nombre_empresa') }}">Nombre</a></th>
                     <th scope="col"><a href="{{ $sortable->url('trabajadores') }}" class="{{ $sortable->classes('trabajadores') }}">Trabajadores</a></th>
                     <th scope="col"><a href="{{ $sortable->url('numero_profesiones') }}" class="{{ $sortable->classes('numero_profesiones') }}">Número de profesiones</a></th>
+                    <th scope="col"><a href="{{$sortable->url('proyectos')}}" class="{{ $sortable->classes('proyectos') }}">Proyectos en activo</a></th>
                     <th scope="col" class="text-right th-actions">Acciones</th>
                 </tr>
                 </thead>

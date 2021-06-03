@@ -46,7 +46,7 @@ class Team extends Model
 
     public function activeProjects()
     {
-        return  $this->belongsToMany(Project::class)->where('status', 1);
+        return  $this->belongsToMany(Project::class)->where('status', 0);
     }
 
 

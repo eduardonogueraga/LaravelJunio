@@ -12,6 +12,7 @@ class TeamFilter extends QueryFilter
         'nombre_empresa' => 'name',
         'trabajadores' => 'users_count',
         'numero_profesiones' => 'professions_count',
+        'proyectos' => 'active_projects_count'
     ];
 
     public function getColumnName($alias)
@@ -25,17 +26,36 @@ class TeamFilter extends QueryFilter
             'search' => 'filled',
             'worker' => 'in:with,without',
             'profession' => 'in:with,without',
+            'projects' => 'in:with,without',
+            'actives' => 'array|exists:projects,id',
             'headquarter' => 'exists:headquarters,name',
             'professions' => 'array|exists:professions,id',
-            'order' => [new SortableColumn(['nombre_empresa','trabajadores','numero_profesiones'])],
+            'order' => [new SortableColumn(['nombre_empresa','trabajadores','numero_profesiones', 'proyectos'])],
         ];
+    }
+
+    public function actives($query, $actives)
+    {
+        //Numero de entradas del pivote que tengan los id de proyecto esperados
+        $subquery = DB::table('project_team AS pte')
+            ->selectRaw('COUNT(pte.id)')
+            ->whereColumn('pte.team_id', 'teams.id')
+            ->whereIn('pte.project_id', $actives);
+
+           $query->whereQuery($subquery, count($actives));
+    }
+
+    public function projects($query, $project, $method = 'has')
+    {
+        $project == 'without'? $method='doesntHave' : '';
+        return $query->$method('activeProjects');
     }
 
     public function professions($query, $professions)
     {
         $subquery = DB::table('profession_team AS pt')
             ->selectRaw('COUNT(pt.id)')
-            ->whereColumn('pt.team_id', 'teams.id')
+            ->whereColumn('pt.team_id', 'teams.id') //enlaza con el modelo team.id
             ->whereIn('pt.profession_id', $professions);
 
         $query->whereQuery($subquery, count($professions));

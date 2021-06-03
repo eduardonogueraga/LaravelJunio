@@ -6,6 +6,7 @@ use App\Headquarter;
 use App\Http\Requests\CreateTeamRequest;
 use App\Http\Requests\UpdateTeamRequest;
 use App\Profession;
+use App\Project;
 use App\Sortable;
 use App\Team;
 use App\User;
@@ -19,7 +20,8 @@ class TeamController extends Controller
     public function index(Sortable $sortable)
     {
         $teams = Team::query()
-        ->with('users','professions', 'headquarters', 'mainHeadquarter', 'leader')
+        ->with('users','professions', 'headquarters', 'mainHeadquarter', 'leader', 'activeProjects', 'projects')
+        ->withCount('activeProjects')
         ->withCount('users')
         ->withCount('professions')
         ->onlyTrashedIf(request()->routeIs('teams.trashed')) //Controla en funcion de la ruta que lo llama
@@ -40,7 +42,13 @@ class TeamController extends Controller
                             ->with('teams')
                             ->whereHas('teams')
                             ->orderBy('title', 'ASC')->get(),
+            'projects' => Project::query()
+                            ->with('teams')
+                            ->whereHas('teams')
+                            ->where('status', false)
+                            ->orderBy('title', 'ASC')->get(),
             'checkedProfessions' => collect(request('professions')), //La memoria que le viene del request
+            'checkedProjects' => collect(request('actives')),
             'sortable' => $sortable,
         ]);
     }
