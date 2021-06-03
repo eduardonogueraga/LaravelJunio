@@ -32,7 +32,7 @@
         <input name="teams[{{ $team->id }}]" class="form-check-input" type="checkbox"
                id="team_{{ $team->id }}" value="{{ $team->id }}"
                 {{ ($errors->any() ? old('teams.'.$team->id) : $project->teams->contains($team)) ? 'checked' : '' }}>
-        <label class="form-check-label" for="teams_{{ $team->id }}">{{ $team->name }}<span class="note">( Usuarios: {{$team->users_count}}, Proyectos: {{$team->projects_count}})</span></label>
+        <label class="form-check-label" for="teams_{{ $team->id }}">{{ $team->name }}<span class="note">( Usuarios: {{$team->users_count}}, Proyectos: {{$team->active_projects_count}})</span></label>
     </div>
 @endforeach
 

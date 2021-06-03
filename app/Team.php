@@ -44,6 +44,12 @@ class Team extends Model
         return  $this->belongsToMany(Project::class);
     }
 
+    public function activeProjects()
+    {
+        return  $this->belongsToMany(Project::class)->where('status', 1);
+    }
+
+
     public function newEloquentBuilder($query)
     {
         return new TeamQuery($query);

@@ -29,19 +29,14 @@ class ProjectController extends Controller
 
     public function create(Project $project)
     {
-
         $teams = Team::query()
             ->with('users')
-            ->with('projects')
+            ->with('activeProjects')
             ->has('users')
             ->withCount('users')
-            ->withCount('projects')
-//            ->whereHas('projects', function ($query){
-//                return $query->where('status', 0);
-//            })
+            ->withCount('activeProjects')
             ->orderBy('name')
             ->get();
-
 
         return  view('projects.create', [
             'project' => $project,
