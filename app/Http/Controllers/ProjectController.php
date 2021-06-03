@@ -86,17 +86,6 @@ class ProjectController extends Controller
 
     public function update(UpdateProjectRequest $request, Project $project)
     {
-        $oldFinishDate = Carbon::parse($project->finish_date)->startOfDay(); //Pone los stamps a 0
-        $newFinishDate = Carbon::createFromFormat('d/m/Y', $request->finish_date)->startOfDay();
-
-        $request->validate([
-            'finish_date' => ['required',
-                            'date_format:d/m/Y',
-                            ($oldFinishDate != $newFinishDate)?'after:start_day' : ''
-            ],
-        ]);
-
-
         $request->updateProject($project);
         return redirect(route('projects.show', ['project' => $project]));
     }
