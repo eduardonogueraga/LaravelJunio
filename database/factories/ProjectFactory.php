@@ -22,6 +22,8 @@ class ProjectFactory extends Factory
             'title' => $this->developFaker() . ' '. $this->faker->jobTitle,
             'about' => $this->faker->paragraph(10),
             'budget' => $this->faker->randomFloat(2, 1000, 10000),
+            'status' => 1,
+            'finish_date' => '05/06/2021',
         ];
     }
 
