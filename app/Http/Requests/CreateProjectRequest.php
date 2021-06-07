@@ -12,7 +12,7 @@ class CreateProjectRequest extends FormRequest
     {
         return [
             'title' => 'required|regex:/^[a-zA-ZáéíóúñÑ\s]+$/|min:10',
-            'about' => 'required|string|min:10',
+            'about' => 'required|string|max:1000',
             'budget' => 'required|numeric|min:1000|max:10000',
             'finish_date' => 'required|date_format:d/m/Y|after:start_date',
             'teams' => 'array|required|exists:teams,id'
