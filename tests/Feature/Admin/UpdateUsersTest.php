@@ -20,6 +20,7 @@ class UpdateUsersTest extends TestCase
         'last_name' => 'Pérez',
         'email' => 'pepe@mail.es',
         'password' => '123456',
+        'password_confirmation' => '123456',
         'profession_id' => '',
         'other_profession' => '',
         'region' => 'Murcia',

@@ -35,7 +35,7 @@ class CreateUserRequest extends FormRequest
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required',
+            'password' => ['required','confirmed','min:6'], //same:password_confirmation (confirmed solo si el campo es password_confirmation)
             'region' => 'required',
             'city' => 'required',
             'street' => 'required',

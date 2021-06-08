@@ -15,6 +15,12 @@
     <label for="password">Contraseña:</label>
     <input type="password" name="password" placeholder="Al menos 6 caracteres" class="form-control">
 </div>
+
+<div class="form-group">
+    <label for="password_confirmation">Repita la contraseña:</label>
+    <input type="password" name="password_confirmation" placeholder="Repita la contraseña" class="form-control">
+</div>
+
 <div class="form-group">
     <label for="profession_id">Profesión: </label>
     <select name="profession_id" id="profession_id" class="form-control">

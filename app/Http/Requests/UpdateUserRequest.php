@@ -35,7 +35,7 @@ class UpdateUserRequest extends FormRequest
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required|email|unique:users,email,'.$this->user->id,
-            'password' => '',
+            'password' => ['nullable','confirmed','min:6'],
             'region' => 'required',
             'city' => 'required',
             'street' => 'required',
