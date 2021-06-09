@@ -15,7 +15,8 @@ class RestoreUsersTest extends TestCase
      function it_restore_a_user_and_his_profile()
     {
         $user = User::factory()->create();
-        $user->skills()->attach(Skill::factory()->create());
+        $skill = Skill::factory()->create();
+        $user->skills()->attach([$skill->id]);
 
         $user->profile()->delete();
         $user->delete();
@@ -34,6 +35,12 @@ class RestoreUsersTest extends TestCase
         $this->assertDatabaseHas('user_profiles',[
             'user_id' => $user->id,
             'deleted_at' => null,
+        ]);
+
+        $this->assertDatabaseHas('skill_user',[
+            'user_id' => $user->id,
+            'skill_id' => $skill->id,
+            'deleted_at' => null
         ]);
 
     }

@@ -89,10 +89,17 @@ class UserController extends Controller
 
     public function restore($id)
     {
-        $user = User::onlyTrashed()->where('id', $id)->firstOrFail();
-        $user->profile()->restore();
-        $user->address()->restore();
-        $user->restore();
+        DB::transaction(function () use($id) {
+            $user = User::onlyTrashed()->where('id', $id)->firstOrFail();
+            $user->profile()->restore();
+            $user->address()->restore();
+
+            DB::table('skill_user')
+                ->where('user_id', $user->id)
+                ->update(['deleted_at' => null]);
+
+            $user->restore();
+        });
 
         return redirect()->route('users.index');
     }
